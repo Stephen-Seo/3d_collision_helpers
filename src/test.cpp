@@ -218,7 +218,7 @@ int main() {
     CHECK_TRUE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
 
     sphere.x = 1.0F;
-    sphere.z = 1.8F;
+    sphere.z = 2.0F;
     CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
   }
 

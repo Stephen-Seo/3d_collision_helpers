@@ -207,124 +207,28 @@ int SC_SACD_Sphere_Collision(const SC_SACD_Sphere *a, const SC_SACD_Sphere *b) {
 
 int SC_SACD_Sphere_AABB_Box_Collision(const SC_SACD_Sphere *sphere,
                                       const SC_SACD_AABB_Box *box) {
-  std::vector<SC_SACD_Vec3> dirs{// yz-plane
-                                 {0.0F, INV_SQRT2, INV_SQRT2},
-                                 // xz-plane
-                                 {INV_SQRT2, 0.0F, INV_SQRT2},
-                                 // xy-plane
-                                 {INV_SQRT2, INV_SQRT2, 0.0F}};
-  SC_SACD_Vec3 pos{box->x, box->y, box->z};
-  SC_SACD_Vec3 sphere_pos{sphere->x, sphere->y, sphere->z};
+  SC_SACD_Vec3 box_min{
+    box->x - box->width / 2.0F,
+    box->y - box->height / 2.0F,
+    box->z - box->depth / 2.0F,
+  };
+  SC_SACD_Vec3 box_max{
+    box->x + box->width / 2.0F,
+    box->y + box->height / 2.0F,
+    box->z + box->depth / 2.0F,
+  };
 
-  for (unsigned int i = 0; i < 3; ++i) {
-    SC_SACD_Vec3 side_pos = pos;
+  SC_SACD_Vec3 clamped{
+    std::max(box_min.x, std::min(sphere->x, box_max.x)),
+    std::max(box_min.y, std::min(sphere->y, box_max.y)),
+    std::max(box_min.z, std::min(sphere->z, box_max.z))
+  };
 
-    // Side 1 of 2.
+  SC_SACD_Vec3 diff = clamped - SC_SACD_Vec3{sphere->x, sphere->y, sphere->z};
 
-    // Get point on side.
-    switch (i) {
-      case 0:  // yz-plane
-        side_pos.x += box->width / 2.0F;
-        break;
-      case 1:  // xz-plane
-        side_pos.y += box->height / 2.0F;
-        break;
-      case 2:  // xy-plane
-        side_pos.z += box->depth / 2.0F;
-        break;
-    }
+  float dist = std::sqrt(SC_SACD_Dot_Product(diff, diff));
 
-    // Calculate closest point to "side".
-    SC_SACD_Vec3 closest_point =
-        SC_SACD_Closest_Point_Dir_Normalized(&side_pos, &dirs[i], &sphere_pos);
-    // Calculate diff between closest and sphere.
-    SC_SACD_Vec3 point_diff = closest_point - sphere_pos;
-    float magnitude = std::sqrt(SC_SACD_Dot_Product(point_diff, point_diff));
-
-    if (magnitude < sphere->radius) {
-      // Check if point is on side.
-      switch (i) {
-        case 0:  // yz-plane
-          if (closest_point.y > side_pos.y - box->height / 2.0F &&
-              closest_point.y < side_pos.y + box->height / 2.0F &&
-              closest_point.z > side_pos.z - box->depth / 2.0F &&
-              closest_point.z < side_pos.z + box->depth / 2.0F) {
-            return 1;
-          }
-          break;
-        case 1:  // xz-plane
-          if (closest_point.x > side_pos.x - box->width / 2.0F &&
-              closest_point.x < side_pos.x + box->width / 2.0F &&
-              closest_point.z > side_pos.z - box->depth / 2.0F &&
-              closest_point.z < side_pos.z + box->depth / 2.0F) {
-            return 1;
-          }
-          break;
-        case 2:  // xy-plane
-          if (closest_point.x > side_pos.x - box->width / 2.0F &&
-              closest_point.x < side_pos.x + box->width / 2.0F &&
-              closest_point.y > side_pos.y - box->height / 2.0F &&
-              closest_point.y < side_pos.y + box->height / 2.0F) {
-            return 1;
-          }
-          break;
-      }
-    }
-
-    // Side 2 of 2.
-
-    // Get point on side.
-    switch (i) {
-      case 0:  // yz-plane
-        side_pos.x -= box->width / 2.0F;
-        break;
-      case 1:  // xz-plane
-        side_pos.y -= box->height / 2.0F;
-        break;
-      case 2:  // xy-plane
-        side_pos.z -= box->depth / 2.0F;
-        break;
-    }
-
-    // Calculate closest point to "side".
-    closest_point =
-        SC_SACD_Closest_Point_Dir_Normalized(&side_pos, &dirs[i], &sphere_pos);
-    // Calculate diff between closest and sphere.
-    point_diff = closest_point - sphere_pos;
-    magnitude = std::sqrt(SC_SACD_Dot_Product(point_diff, point_diff));
-
-    if (magnitude < sphere->radius) {
-      // Check if point is on side.
-      switch (i) {
-        case 0:  // yz-plane
-          if (closest_point.y > side_pos.y - box->height / 2.0F &&
-              closest_point.y < side_pos.y + box->height / 2.0F &&
-              closest_point.z > side_pos.z - box->depth / 2.0F &&
-              closest_point.z < side_pos.z + box->depth / 2.0F) {
-            return 1;
-          }
-          break;
-        case 1:  // xz-plane
-          if (closest_point.x > side_pos.x - box->width / 2.0F &&
-              closest_point.x < side_pos.x + box->width / 2.0F &&
-              closest_point.z > side_pos.z - box->depth / 2.0F &&
-              closest_point.z < side_pos.z + box->depth / 2.0F) {
-            return 1;
-          }
-          break;
-        case 2:  // xy-plane
-          if (closest_point.x > side_pos.x - box->width / 2.0F &&
-              closest_point.x < side_pos.x + box->width / 2.0F &&
-              closest_point.y > side_pos.y - box->height / 2.0F &&
-              closest_point.y < side_pos.y + box->height / 2.0F) {
-            return 1;
-          }
-          break;
-      }
-    }
-  }
-
-  return 0;
+  return dist < sphere->radius;
 }
 
 int SC_SACD_Sphere_Box_Collision(const SC_SACD_Sphere *sphere,
