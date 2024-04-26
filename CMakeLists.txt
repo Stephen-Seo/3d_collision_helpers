@@ -36,3 +36,30 @@ $<IF:$<CONFIG:Debug>,-Og,-fno-delete-null-pointer-checks -fno-strict-overflow -f
 -Wl,-z,relro -Wl,-z,now
 -fPIC
 )
+
+add_executable(UnitTest src/test.cpp)
+target_link_libraries(UnitTest SC_SeparatingAxisCollisionDetection)
+target_include_directories(UnitTest PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src")
+
+target_compile_options(UnitTest PUBLIC
+$<IF:$<CONFIG:Debug>,-Og,-fno-delete-null-pointer-checks -fno-strict-overflow -fno-strict-aliasing -ftrivial-auto-var-init=zero>
+-Wall -Wformat -Wformat=2 -Wconversion -Wimplicit-fallthrough
+-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3
+-D_GLIBCXX_ASSERTIONS
+-fstrict-flex-arrays=3
+-fstack-clash-protection -fstack-protector-strong
+-fPIE
+)
+
+target_link_options(UnitTest PUBLIC
+$<IF:$<CONFIG:Debug>,-Og,-fno-delete-null-pointer-checks -fno-strict-overflow -fno-strict-aliasing -ftrivial-auto-var-init=zero>
+-Wall -Wformat -Wformat=2 -Wconversion -Wimplicit-fallthrough
+-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3
+-D_GLIBCXX_ASSERTIONS
+-fstrict-flex-arrays=3
+-fstack-clash-protection -fstack-protector-strong
+-Wl,-z,nodlopen -Wl,-z,noexecstack
+-Wl,-z,relro -Wl,-z,now
+-fPIE
+-pie
+)
