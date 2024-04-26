@@ -40,6 +40,7 @@ $<IF:$<CONFIG:Debug>,-Og,-fno-delete-null-pointer-checks -fno-strict-overflow -f
 add_executable(UnitTest src/test.cpp)
 target_link_libraries(UnitTest SC_SeparatingAxisCollisionDetection)
 target_include_directories(UnitTest PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src")
+target_compile_features(UnitTest PUBLIC cxx_std_20)
 
 target_compile_options(UnitTest PUBLIC
 $<IF:$<CONFIG:Debug>,-Og,-fno-delete-null-pointer-checks -fno-strict-overflow -fno-strict-aliasing -ftrivial-auto-var-init=zero>
