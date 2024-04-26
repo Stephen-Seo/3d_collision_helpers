@@ -131,6 +131,97 @@ int main() {
     CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
   }
 
+  // Test Sphere/Sphere collision check.
+  {
+    SC_SACD_Sphere a{0.0F, 0.0F, 0.0F, 1.0F};
+    SC_SACD_Sphere b{0.0F, 0.0F, 0.0F, 1.0F};
+    CHECK_TRUE(SC_SACD_Sphere_Collision(&a, &b));
+
+    a.x = 10.0F;
+    a.y = 10.0F;
+    a.z = 10.0F;
+    b.x = 10.0F;
+    b.y = 10.5F;
+    b.z = 10.0F;
+    CHECK_TRUE(SC_SACD_Sphere_Collision(&a, &b));
+    b.y = 12.0F;
+    b.z = 12.0F;
+    CHECK_FALSE(SC_SACD_Sphere_Collision(&a, &b));
+    b.y = 11.0F;
+    b.z = 11.0F;
+    CHECK_TRUE(SC_SACD_Sphere_Collision(&a, &b));
+  }
+
+  // Test Sphere/AABB collision check.
+  {
+    SC_SACD_Sphere sphere{0.0F, 0.0F, 0.0F, 1.0F};
+    SC_SACD_AABB_Box box{0.0F, 0.0F, 0.0F, 2.0F, 2.0F, 2.0F};
+
+    CHECK_TRUE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+
+    sphere.x = 2.1F;
+    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+
+    sphere.x = -2.1F;
+    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+
+    sphere.x = 0.0F;
+    sphere.y = 2.1F;
+    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+
+    sphere.y = -2.1F;
+    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+
+    sphere.y = 0.0F;
+    sphere.z = 2.1F;
+    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+
+    sphere.z = -2.1F;
+    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+
+    sphere.z = 0.0F;
+    sphere.x = 1.0F;
+    sphere.y = 1.0F;
+    CHECK_TRUE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+
+    sphere.x = -1.0F;
+    sphere.y = -1.0F;
+    CHECK_TRUE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+
+    sphere.x = 2.0F;
+    sphere.y = 2.0F;
+    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+
+    sphere.x = -2.0F;
+    sphere.y = -2.0F;
+    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+
+    sphere.x = 1.0F;
+    sphere.y = 0.0F;
+    sphere.z = 1.0F;
+    CHECK_TRUE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+
+    sphere.x = -1.0F;
+    sphere.z = -1.0F;
+    CHECK_TRUE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+
+    sphere.x = 2.0F;
+    sphere.z = 2.0F;
+    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+
+    sphere.x = -2.0F;
+    sphere.z = -2.0F;
+    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+
+    sphere.x = 1.0F;
+    sphere.z = 1.5F;
+    CHECK_TRUE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+
+    sphere.x = 1.0F;
+    sphere.z = 1.8F;
+    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+  }
+
   std::cout << "Checks checked: " << checks_checked << '\n'
             << "Checks passed:  " << checks_passed << '\n';
 

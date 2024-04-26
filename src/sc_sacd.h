@@ -60,6 +60,13 @@ typedef struct SC_SACD_EXPORT SC_SACD_Generic_Box {
   float z_radians;
 } SC_SACD_Generic_Box;
 
+typedef struct SC_SACD_EXPORT SC_SACD_Sphere {
+  float x;
+  float y;
+  float z;
+  float radius;
+} SC_SACD_Sphere;
+
 /// Returns non-zero if there is collision.
 SC_SACD_EXPORT int SC_SACD_AABB_Box_Collision(const SC_SACD_AABB_Box *a,
                                               const SC_SACD_AABB_Box *b);
@@ -71,6 +78,15 @@ SC_SACD_EXPORT int SC_SACD_Generic_Box_Collision(const SC_SACD_Generic_Box *a,
 /// Returns non-zero if there is collision.
 SC_SACD_EXPORT int SC_SACD_AABB_Generic_Box_Collision(
     const SC_SACD_AABB_Box *a, const SC_SACD_Generic_Box *b);
+
+SC_SACD_EXPORT int SC_SACD_Sphere_Collision(const SC_SACD_Sphere *a,
+                                            const SC_SACD_Sphere *b);
+
+SC_SACD_EXPORT int SC_SACD_Sphere_AABB_Box_Collision(
+    const SC_SACD_Sphere *sphere, const SC_SACD_AABB_Box *box);
+
+SC_SACD_EXPORT int SC_SACD_Sphere_Box_Collision(const SC_SACD_Sphere *sphere,
+                                                const SC_SACD_Generic_Box *box);
 
 SC_SACD_EXPORT float SC_SACD_Dot_Product(const SC_SACD_Vec3 a,
                                          const SC_SACD_Vec3 b);
@@ -84,6 +100,14 @@ SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Mat3_Vec3_Mult(const SC_SACD_Mat3 *mat,
 SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Vec3_Rotate(const SC_SACD_Vec3 vec,
                                                 float x_axis, float y_axis,
                                                 float z_axis);
+
+SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Closest_Point_Dir_Normalized(
+    const SC_SACD_Vec3 *pos, const SC_SACD_Vec3 *dir,
+    const SC_SACD_Vec3 *point);
+
+SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Closest_Point(const SC_SACD_Vec3 *pos,
+                                                  const SC_SACD_Vec3 *dir,
+                                                  const SC_SACD_Vec3 *point);
 
 #ifdef __cplusplus
 }
