@@ -5,9 +5,22 @@
 
 int SC_SACD_AABB_Box_Collision(const SC_SACD_AABB_Box *a,
                                const SC_SACD_AABB_Box *b) {
-  return (a->x < (b->x + b->width) && (a->x + a->width) > b->x &&
-          a->y < (b->y + b->height) && (a->y + a->height) > b->y &&
-          a->z < (b->z + b->depth) && (a->z + a->depth) > b->z)
+  float ax_min = a->x - a->width / 2.0F;
+  float ax_max = a->x + a->width / 2.0F;
+  float ay_min = a->y - a->height / 2.0F;
+  float ay_max = a->y + a->height / 2.0F;
+  float az_min = a->z - a->depth / 2.0F;
+  float az_max = a->z + a->depth / 2.0F;
+
+  float bx_min = b->x - b->width / 2.0F;
+  float bx_max = b->x + b->width / 2.0F;
+  float by_min = b->y - b->height / 2.0F;
+  float by_max = b->y + b->height / 2.0F;
+  float bz_min = b->z - b->depth / 2.0F;
+  float bz_max = b->z + b->depth / 2.0F;
+
+  return (ax_min < bx_max && ax_max > bx_min && ay_min < by_max &&
+          ay_max > by_min && az_min < bz_max && az_max > bz_min)
              ? 1
              : 0;
 }

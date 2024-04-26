@@ -31,6 +31,7 @@ typedef struct SC_SACD_EXPORT SC_SACD_Mat3 {
 } SC_SACD_Mat3;
 
 typedef struct SC_SACD_EXPORT SC_SACD_AABB_Box {
+  /// Coordinates are to center of box.
   float x;
   float y;
   float z;
@@ -43,6 +44,7 @@ typedef struct SC_SACD_EXPORT SC_SACD_AABB_Box {
 } SC_SACD_AABB_Box;
 
 typedef struct SC_SACD_EXPORT SC_SACD_Generic_Box {
+  /// Coordinates are to center of box.
   float x;
   float y;
   float z;
