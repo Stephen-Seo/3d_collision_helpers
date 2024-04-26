@@ -25,7 +25,7 @@ static int checks_passed = 0;
     }                                                                  \
   } while (false);
 
-#include "sd_sacd.h"
+#include "sc_sacd.h"
 
 int main() {
   // Test 2D AABB.

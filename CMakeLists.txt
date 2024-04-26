@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.22.1)
-project(SC_SeparatingAxisCollisionDetection CXX)
+project(SC_3D_CollisionDetectionHelpers CXX)
 
-set(SC_SeparatingAxisCollisionDetection_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/sd_sacd.cpp")
-set(SC_SeparatingAxisCollisionDetection_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/src/sd_sacd.h")
+set(SC_3D_CollisionDetectionHelpers_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/sc_sacd.cpp")
+set(SC_3D_CollisionDetectionHelpers_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/src/sc_sacd.h")
 
-add_library(SC_SeparatingAxisCollisionDetection ${SC_SeparatingAxisCollisionDetection_SOURCES})
+add_library(SC_3D_CollisionDetectionHelpers ${SC_3D_CollisionDetectionHelpers_SOURCES})
 
-set_target_properties(SC_SeparatingAxisCollisionDetection PROPERTIES VERSION 1.0.0 SOVERSION 1)
+set_target_properties(SC_3D_CollisionDetectionHelpers PROPERTIES VERSION 1.0.0 SOVERSION 1)
 
 if(NOT DEFINED CMAKE_BUILD_TYPE OR "${CMAKE_BUILD_TYPE}" STREQUAL "")
     message("Defaulting to \"Debug\" build type.")
@@ -15,7 +15,7 @@ else()
     message("Using build type \"${CMAKE_BUILD_TYPE}\".")
 endif()
 
-target_compile_options(SC_SeparatingAxisCollisionDetection PUBLIC
+target_compile_options(SC_3D_CollisionDetectionHelpers PUBLIC
 $<IF:$<CONFIG:Debug>,-Og,-fno-delete-null-pointer-checks -fno-strict-overflow -fno-strict-aliasing -ftrivial-auto-var-init=zero>
 -Wall -Wformat -Wformat=2 -Wconversion -Wimplicit-fallthrough
 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3
@@ -25,7 +25,7 @@ $<IF:$<CONFIG:Debug>,-Og,-fno-delete-null-pointer-checks -fno-strict-overflow -f
 -fPIC
 )
 
-target_link_options(SC_SeparatingAxisCollisionDetection PUBLIC
+target_link_options(SC_3D_CollisionDetectionHelpers PUBLIC
 $<IF:$<CONFIG:Debug>,-Og,-fno-delete-null-pointer-checks -fno-strict-overflow -fno-strict-aliasing -ftrivial-auto-var-init=zero>
 -Wall -Wformat -Wformat=2 -Wconversion -Wimplicit-fallthrough
 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3
@@ -38,7 +38,7 @@ $<IF:$<CONFIG:Debug>,-Og,-fno-delete-null-pointer-checks -fno-strict-overflow -f
 )
 
 add_executable(UnitTest src/test.cpp)
-target_link_libraries(UnitTest SC_SeparatingAxisCollisionDetection)
+target_link_libraries(UnitTest SC_3D_CollisionDetectionHelpers)
 target_include_directories(UnitTest PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src")
 target_compile_features(UnitTest PUBLIC cxx_std_20)
 
@@ -64,3 +64,6 @@ $<IF:$<CONFIG:Debug>,-Og,-fno-delete-null-pointer-checks -fno-strict-overflow -f
 -fPIE
 -pie
 )
+
+install(TARGETS SC_3D_CollisionDetectionHelpers DESTINATION "lib")
+install(FILES ${SC_3D_CollisionDetectionHelpers_HEADERS} DESTINATION "include")
