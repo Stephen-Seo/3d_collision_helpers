@@ -43,7 +43,8 @@ std::vector<SC_SACD_Vec3> SC_SACD_Get_Box_Normals(
   normals.back() = SC_SACD_Vec3_Rotate(normals.back(), box->x_radians,
                                        box->y_radians, box->z_radians);
 
-  // Not normalizing the normals on purpose for optimization. (No unit vectors.)
+  // Not normalizing the normals on purpose for optimization. It should already
+  // be normalized as each normal is a rotated unit vector.
   return normals;
 }
 
@@ -208,21 +209,19 @@ int SC_SACD_Sphere_Collision(const SC_SACD_Sphere *a, const SC_SACD_Sphere *b) {
 int SC_SACD_Sphere_AABB_Box_Collision(const SC_SACD_Sphere *sphere,
                                       const SC_SACD_AABB_Box *box) {
   SC_SACD_Vec3 box_min{
-    box->x - box->width / 2.0F,
-    box->y - box->height / 2.0F,
-    box->z - box->depth / 2.0F,
+      box->x - box->width / 2.0F,
+      box->y - box->height / 2.0F,
+      box->z - box->depth / 2.0F,
   };
   SC_SACD_Vec3 box_max{
-    box->x + box->width / 2.0F,
-    box->y + box->height / 2.0F,
-    box->z + box->depth / 2.0F,
+      box->x + box->width / 2.0F,
+      box->y + box->height / 2.0F,
+      box->z + box->depth / 2.0F,
   };
 
-  SC_SACD_Vec3 clamped{
-    std::max(box_min.x, std::min(sphere->x, box_max.x)),
-    std::max(box_min.y, std::min(sphere->y, box_max.y)),
-    std::max(box_min.z, std::min(sphere->z, box_max.z))
-  };
+  SC_SACD_Vec3 clamped{std::max(box_min.x, std::min(sphere->x, box_max.x)),
+                       std::max(box_min.y, std::min(sphere->y, box_max.y)),
+                       std::max(box_min.z, std::min(sphere->z, box_max.z))};
 
   SC_SACD_Vec3 diff = clamped - SC_SACD_Vec3{sphere->x, sphere->y, sphere->z};
 
@@ -233,8 +232,57 @@ int SC_SACD_Sphere_AABB_Box_Collision(const SC_SACD_Sphere *sphere,
 
 int SC_SACD_Sphere_Box_Collision(const SC_SACD_Sphere *sphere,
                                  const SC_SACD_Generic_Box *box) {
-  // TODO
-  return 0;
+  // Adapted from Generic_Box/Generic_Box collision.
+
+  // First check plane where normal = box_pos - sphere_pos.
+
+  SC_SACD_Vec3 sphere_pos{sphere->x, sphere->y, sphere->z};
+  SC_SACD_Vec3 sphere_box_normal =
+      SC_SACD_Vec3{box->x, box->y, box->z} - sphere_pos;
+  sphere_box_normal =
+      sphere_box_normal /
+      std::sqrt(SC_SACD_Dot_Product(sphere_box_normal, sphere_box_normal));
+
+  std::vector<SC_SACD_Vec3> normals{sphere_box_normal};
+
+  std::vector<SC_SACD_MinMax> box_minmaxes =
+      SC_SACD_Get_Box_MinMax(box, normals);
+
+  float projected_0 = SC_SACD_Dot_Product(
+      sphere_box_normal, sphere_pos + sphere_box_normal * sphere->radius);
+  float projected_1 = SC_SACD_Dot_Product(
+      sphere_box_normal, sphere_pos - sphere_box_normal * sphere->radius);
+  if (projected_0 < projected_1) {
+    if (box_minmaxes[0].max < projected_0 ||
+        box_minmaxes[0].min > projected_1) {
+      return 0;
+    }
+  } else if (box_minmaxes[0].max < projected_1 ||
+             box_minmaxes[0].min > projected_0) {
+    return 0;
+  }
+
+  // Next check the planes for the 3 normals of the box.
+
+  normals = SC_SACD_Get_Box_Normals(box);
+  box_minmaxes = SC_SACD_Get_Box_MinMax(box, normals);
+  for (unsigned int i = 0; i < normals.size(); ++i) {
+    projected_0 = SC_SACD_Dot_Product(normals[i],
+                                      sphere_pos + normals[i] * sphere->radius);
+    projected_1 = SC_SACD_Dot_Product(normals[i],
+                                      sphere_pos - normals[i] * sphere->radius);
+    if (projected_0 < projected_1) {
+      if (box_minmaxes[i].max < projected_0 ||
+          box_minmaxes[i].min > projected_1) {
+        return 0;
+      }
+    } else if (box_minmaxes[i].max < projected_1 ||
+               box_minmaxes[i].min > projected_0) {
+      return 0;
+    }
+  }
+
+  return 1;
 }
 
 float SC_SACD_Dot_Product(const SC_SACD_Vec3 a, const SC_SACD_Vec3 b) {
