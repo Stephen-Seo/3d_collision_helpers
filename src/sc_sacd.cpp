@@ -27,6 +27,30 @@ SC_SACD_Vec3 operator/(const SC_SACD_Vec3 &a, float scalar) {
   return SC_SACD_Vec3{a.x / scalar, a.y / scalar, a.z / scalar};
 }
 
+SC_SACD_Mat3 operator*(const SC_SACD_Mat3 &a, const SC_SACD_Mat3 &b) {
+  SC_SACD_Mat3 mat;
+
+  mat.x0 = b.x0 * a.x0 + b.y0 * a.x1 + b.z0 * a.x2;
+  mat.y0 = b.x0 * a.y0 + b.y0 * a.y1 + b.z0 * a.y2;
+  mat.z0 = b.x0 * a.z0 + b.y0 * a.z1 + b.z0 * a.z2;
+
+  mat.x1 = b.x1 * a.x0 + b.y1 * a.x1 + b.z1 * a.x2;
+  mat.y1 = b.x1 * a.y0 + b.y1 * a.y1 + b.z1 * a.y2;
+  mat.z1 = b.x1 * a.z0 + b.y1 * a.z1 + b.z1 * a.z2;
+
+  mat.x2 = b.x2 * a.x0 + b.y2 * a.x1 + b.z2 * a.x2;
+  mat.y2 = b.x2 * a.y0 + b.y2 * a.y1 + b.z2 * a.y2;
+  mat.z2 = b.x2 * a.z0 + b.y2 * a.z1 + b.z2 * a.z2;
+
+  return mat;
+}
+
+SC_SACD_Vec3 operator*(const SC_SACD_Mat3 &mat, const SC_SACD_Vec3 &vec) {
+  return SC_SACD_Vec3{vec.x * mat.x0 + vec.y * mat.x1 + vec.z * mat.x2,
+                      vec.x * mat.y0 + vec.y * mat.y1 + vec.z * mat.y2,
+                      vec.x * mat.z0 + vec.y * mat.z1 + vec.z * mat.z2};
+}
+
 std::vector<SC_SACD_Vec3> SC_SACD_Get_Box_Normals(
     const SC_SACD_Generic_Box *box) {
   std::vector<SC_SACD_Vec3> normals;
@@ -294,13 +318,17 @@ SC_SACD_Vec3 SC_SACD_Cross_Product(const SC_SACD_Vec3 a, const SC_SACD_Vec3 b) {
                       a.x * b.y - a.y * b.x};
 }
 
+SC_SACD_Mat3 SC_SACD_Mat3_Identity(void) {
+  return SC_SACD_Mat3{1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F};
+}
+
+SC_SACD_Mat3 SC_SACD_Mat3_Mult(const SC_SACD_Mat3 *a, const SC_SACD_Mat3 *b) {
+  return (*a) * (*b);
+}
+
 SC_SACD_Vec3 SC_SACD_Mat3_Vec3_Mult(const SC_SACD_Mat3 *mat,
                                     const SC_SACD_Vec3 vec) {
-  return SC_SACD_Vec3{
-      vec.x * mat->x0 + vec.y * mat->y0 + vec.z * mat->z0,
-      vec.x * mat->x1 + vec.y * mat->y1 + vec.z * mat->z1,
-      vec.x * mat->x2 + vec.y * mat->y2 + vec.z * mat->z2,
-  };
+  return (*mat) * vec;
 }
 
 SC_SACD_Vec3 SC_SACD_Vec3_Rotate(const SC_SACD_Vec3 vec, float x_axis,
@@ -326,43 +354,67 @@ SC_SACD_Vec3 SC_SACD_Vec3_Rotate(const SC_SACD_Vec3 vec, float x_axis,
   SC_SACD_Vec3 result;
 
   // About x_axis.
-  mat.x0 = 1.0F;
-  mat.y0 = 0.0F;
-  mat.z0 = 0.0F;
-  mat.x1 = 0.0F;
-  mat.y1 = std::cos(x_axis);
-  mat.z1 = -std::sin(x_axis);
-  mat.x2 = 0.0F;
-  mat.y2 = -mat.z1;
-  mat.z2 = mat.y1;
+  mat = SC_SACD_Rotation_Mat3_XAxis(x_axis);
 
   result = SC_SACD_Mat3_Vec3_Mult(&mat, vec);
 
   // About y_axis.
-  mat.x0 = std::cos(y_axis);
-  mat.y0 = 0.0F;
-  mat.z0 = std::sin(y_axis);
-  mat.x1 = 0.0F;
-  mat.y1 = 1.0F;
-  mat.z1 = 0.0F;
-  mat.x2 = -mat.z0;
-  mat.y2 = 0.0F;
-  mat.z2 = mat.x0;
+  mat = SC_SACD_Rotation_Mat3_YAxis(y_axis);
 
   result = SC_SACD_Mat3_Vec3_Mult(&mat, result);
 
   // About z_axis.
-  mat.x0 = std::cos(z_axis);
-  mat.y0 = -std::sin(z_axis);
-  mat.z0 = 0.0F;
-  mat.x1 = -mat.y0;
-  mat.y1 = mat.x0;
-  mat.z1 = 0.0F;
-  mat.x2 = 0.0F;
-  mat.y2 = 0.0F;
-  mat.z2 = 1.0F;
+  mat = SC_SACD_Rotation_Mat3_ZAxis(z_axis);
 
   return SC_SACD_Mat3_Vec3_Mult(&mat, result);
+}
+
+SC_SACD_Mat3 SC_SACD_Rotation_Mat3_XAxis(float x_radians) {
+  SC_SACD_Mat3 mat;
+
+  mat.x0 = 1.0F;
+  mat.x1 = 0.0F;
+  mat.x2 = 0.0F;
+  mat.y0 = 0.0F;
+  mat.y1 = std::cos(x_radians);
+  mat.y2 = -std::sin(x_radians);
+  mat.z0 = 0.0F;
+  mat.z1 = -mat.y2;
+  mat.z2 = mat.y1;
+
+  return mat;
+}
+
+SC_SACD_Mat3 SC_SACD_Rotation_Mat3_YAxis(float y_radians) {
+  SC_SACD_Mat3 mat;
+
+  mat.x0 = std::cos(y_radians);
+  mat.x1 = 0.0F;
+  mat.x2 = std::sin(y_radians);
+  mat.y0 = 0.0F;
+  mat.y1 = 1.0F;
+  mat.y2 = 0.0F;
+  mat.z0 = -mat.x2;
+  mat.z1 = 0.0F;
+  mat.z2 = mat.x0;
+
+  return mat;
+}
+
+SC_SACD_Mat3 SC_SACD_Rotation_Mat3_ZAxis(float z_radians) {
+  SC_SACD_Mat3 mat;
+
+  mat.x0 = std::cos(z_radians);
+  mat.x1 = -std::sin(z_radians);
+  mat.x2 = 0.0F;
+  mat.y0 = -mat.x1;
+  mat.y1 = mat.x0;
+  mat.y2 = 0.0F;
+  mat.z0 = 0.0F;
+  mat.z1 = 0.0F;
+  mat.z2 = 1.0F;
+
+  return mat;
 }
 
 SC_SACD_Vec3 SC_SACD_Closest_Point_Dir_Normalized(const SC_SACD_Vec3 *pos,

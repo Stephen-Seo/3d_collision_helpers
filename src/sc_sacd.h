@@ -25,9 +25,9 @@ typedef struct SC_SACD_EXPORT SC_SACD_Vec3 {
 } SC_SACD_Vec3;
 
 typedef struct SC_SACD_EXPORT SC_SACD_Mat3 {
-  float x0, y0, z0;
-  float x1, y1, z1;
-  float x2, y2, z2;
+  float x0, x1, x2;
+  float y0, y1, y2;
+  float z0, z1, z2;
 } SC_SACD_Mat3;
 
 typedef struct SC_SACD_EXPORT SC_SACD_AABB_Box {
@@ -94,12 +94,21 @@ SC_SACD_EXPORT float SC_SACD_Dot_Product(const SC_SACD_Vec3 a,
 SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Cross_Product(const SC_SACD_Vec3 a,
                                                   const SC_SACD_Vec3 b);
 
+SC_SACD_EXPORT SC_SACD_Mat3 SC_SACD_Mat3_Identity(void);
+
+SC_SACD_EXPORT SC_SACD_Mat3 SC_SACD_Mat3_Mult(const SC_SACD_Mat3 *a,
+                                              const SC_SACD_Mat3 *b);
+
 SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Mat3_Vec3_Mult(const SC_SACD_Mat3 *mat,
                                                    const SC_SACD_Vec3 vec);
 
 SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Vec3_Rotate(const SC_SACD_Vec3 vec,
                                                 float x_axis, float y_axis,
                                                 float z_axis);
+
+SC_SACD_EXPORT SC_SACD_Mat3 SC_SACD_Rotation_Mat3_XAxis(float x_radians);
+SC_SACD_EXPORT SC_SACD_Mat3 SC_SACD_Rotation_Mat3_YAxis(float y_radians);
+SC_SACD_EXPORT SC_SACD_Mat3 SC_SACD_Rotation_Mat3_ZAxis(float z_radians);
 
 SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Closest_Point_Dir_Normalized(
     const SC_SACD_Vec3 *pos, const SC_SACD_Vec3 *dir,
