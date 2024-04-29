@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 2.0.0
+
+Add collision detection with Spheres.
+
+Add some more vector/matrix math stuff.
+
 ## Version 1.0.0
 
 First version of this library.
