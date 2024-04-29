@@ -27,28 +27,37 @@ SC_SACD_Vec3 operator/(const SC_SACD_Vec3 &a, float scalar) {
   return SC_SACD_Vec3{a.x / scalar, a.y / scalar, a.z / scalar};
 }
 
-SC_SACD_Mat3 operator*(const SC_SACD_Mat3 &a, const SC_SACD_Mat3 &b) {
-  SC_SACD_Mat3 mat;
+SC_SACD_Mat4 operator*(const SC_SACD_Mat4 &a, const SC_SACD_Mat4 &b) {
+  SC_SACD_Mat4 mat;
 
-  mat.x0 = b.x0 * a.x0 + b.y0 * a.x1 + b.z0 * a.x2;
-  mat.y0 = b.x0 * a.y0 + b.y0 * a.y1 + b.z0 * a.y2;
-  mat.z0 = b.x0 * a.z0 + b.y0 * a.z1 + b.z0 * a.z2;
+  mat.x0 = b.x0 * a.x0 + b.y0 * a.x1 + b.z0 * a.x2 + b.w0 * a.x3;
+  mat.y0 = b.x0 * a.y0 + b.y0 * a.y1 + b.z0 * a.y2 + b.w0 * a.y3;
+  mat.z0 = b.x0 * a.z0 + b.y0 * a.z1 + b.z0 * a.z2 + b.w0 * a.z3;
+  mat.w0 = b.x0 * a.w0 + b.y0 * a.w1 + b.z0 * a.w2 + b.w0 * a.w3;
 
-  mat.x1 = b.x1 * a.x0 + b.y1 * a.x1 + b.z1 * a.x2;
-  mat.y1 = b.x1 * a.y0 + b.y1 * a.y1 + b.z1 * a.y2;
-  mat.z1 = b.x1 * a.z0 + b.y1 * a.z1 + b.z1 * a.z2;
+  mat.x1 = b.x1 * a.x0 + b.y1 * a.x1 + b.z1 * a.x2 + b.w1 * a.x3;
+  mat.y1 = b.x1 * a.y0 + b.y1 * a.y1 + b.z1 * a.y2 + b.w1 * a.y3;
+  mat.z1 = b.x1 * a.z0 + b.y1 * a.z1 + b.z1 * a.z2 + b.w1 * a.z3;
+  mat.w1 = b.x1 * a.w0 + b.y1 * a.w1 + b.z1 * a.w2 + b.w1 * a.w3;
 
-  mat.x2 = b.x2 * a.x0 + b.y2 * a.x1 + b.z2 * a.x2;
-  mat.y2 = b.x2 * a.y0 + b.y2 * a.y1 + b.z2 * a.y2;
-  mat.z2 = b.x2 * a.z0 + b.y2 * a.z1 + b.z2 * a.z2;
+  mat.x2 = b.x2 * a.x0 + b.y2 * a.x1 + b.z2 * a.x2 + b.w2 * a.x3;
+  mat.y2 = b.x2 * a.y0 + b.y2 * a.y1 + b.z2 * a.y2 + b.w2 * a.y3;
+  mat.z2 = b.x2 * a.z0 + b.y2 * a.z1 + b.z2 * a.z2 + b.w2 * a.z3;
+  mat.w2 = b.x2 * a.w0 + b.y2 * a.w1 + b.z2 * a.w2 + b.w2 * a.w3;
+
+  mat.x3 = b.x3 * a.x0 + b.y3 * a.x1 + b.z3 * a.x2 + b.w3 * a.x3;
+  mat.y3 = b.x3 * a.y0 + b.y3 * a.y1 + b.z3 * a.y2 + b.w3 * a.y3;
+  mat.z3 = b.x3 * a.z0 + b.y3 * a.z1 + b.z3 * a.z2 + b.w3 * a.z3;
+  mat.w3 = b.x3 * a.w0 + b.y3 * a.w1 + b.z3 * a.w2 + b.w3 * a.w3;
 
   return mat;
 }
 
-SC_SACD_Vec3 operator*(const SC_SACD_Mat3 &mat, const SC_SACD_Vec3 &vec) {
-  return SC_SACD_Vec3{vec.x * mat.x0 + vec.y * mat.x1 + vec.z * mat.x2,
-                      vec.x * mat.y0 + vec.y * mat.y1 + vec.z * mat.y2,
-                      vec.x * mat.z0 + vec.y * mat.z1 + vec.z * mat.z2};
+SC_SACD_Vec3 operator*(const SC_SACD_Mat4 &mat, const SC_SACD_Vec3 &vec) {
+  return SC_SACD_Vec3{
+      vec.x * mat.x0 + vec.y * mat.x1 + vec.z * mat.x2 + mat.x3,
+      vec.x * mat.y0 + vec.y * mat.y1 + vec.z * mat.y2 + mat.y3,
+      vec.x * mat.z0 + vec.y * mat.z1 + vec.z * mat.z2 + mat.z3};
 }
 
 std::vector<SC_SACD_Vec3> SC_SACD_Get_Box_Normals(
@@ -318,15 +327,16 @@ SC_SACD_Vec3 SC_SACD_Cross_Product(const SC_SACD_Vec3 a, const SC_SACD_Vec3 b) {
                       a.x * b.y - a.y * b.x};
 }
 
-SC_SACD_Mat3 SC_SACD_Mat3_Identity(void) {
-  return SC_SACD_Mat3{1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F};
+SC_SACD_Mat4 SC_SACD_Mat4_Identity(void) {
+  return SC_SACD_Mat4{1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F,
+                      0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F};
 }
 
-SC_SACD_Mat3 SC_SACD_Mat3_Mult(const SC_SACD_Mat3 *a, const SC_SACD_Mat3 *b) {
+SC_SACD_Mat4 SC_SACD_Mat4_Mult(const SC_SACD_Mat4 *a, const SC_SACD_Mat4 *b) {
   return (*a) * (*b);
 }
 
-SC_SACD_Vec3 SC_SACD_Mat3_Vec3_Mult(const SC_SACD_Mat3 *mat,
+SC_SACD_Vec3 SC_SACD_Mat4_Vec3_Mult(const SC_SACD_Mat4 *mat,
                                     const SC_SACD_Vec3 vec) {
   return (*mat) * vec;
 }
@@ -350,69 +360,99 @@ SC_SACD_Vec3 SC_SACD_Vec3_Rotate(const SC_SACD_Vec3 vec, float x_axis,
    * [ -sin, 0, cos ]
    */
 
-  SC_SACD_Mat3 mat;
+  SC_SACD_Mat4 mat;
   SC_SACD_Vec3 result;
 
   // About x_axis.
-  mat = SC_SACD_Rotation_Mat3_XAxis(x_axis);
+  mat = SC_SACD_Rotation_Mat4_XAxis(x_axis);
 
-  result = SC_SACD_Mat3_Vec3_Mult(&mat, vec);
+  result = SC_SACD_Mat4_Vec3_Mult(&mat, vec);
 
   // About y_axis.
-  mat = SC_SACD_Rotation_Mat3_YAxis(y_axis);
+  mat = SC_SACD_Rotation_Mat4_YAxis(y_axis);
 
-  result = SC_SACD_Mat3_Vec3_Mult(&mat, result);
+  result = SC_SACD_Mat4_Vec3_Mult(&mat, result);
 
   // About z_axis.
-  mat = SC_SACD_Rotation_Mat3_ZAxis(z_axis);
+  mat = SC_SACD_Rotation_Mat4_ZAxis(z_axis);
 
-  return SC_SACD_Mat3_Vec3_Mult(&mat, result);
+  return SC_SACD_Mat4_Vec3_Mult(&mat, result);
 }
 
-SC_SACD_Mat3 SC_SACD_Rotation_Mat3_XAxis(float x_radians) {
-  SC_SACD_Mat3 mat;
+SC_SACD_Mat4 SC_SACD_Rotation_Mat4_XAxis(float x_radians) {
+  SC_SACD_Mat4 mat;
 
   mat.x0 = 1.0F;
   mat.x1 = 0.0F;
   mat.x2 = 0.0F;
+  mat.x3 = 0.0F;
+
   mat.y0 = 0.0F;
   mat.y1 = std::cos(x_radians);
   mat.y2 = -std::sin(x_radians);
+  mat.y3 = 0.0F;
+
   mat.z0 = 0.0F;
   mat.z1 = -mat.y2;
   mat.z2 = mat.y1;
+  mat.z3 = 0.0F;
+
+  mat.w0 = 0.0F;
+  mat.w1 = 0.0F;
+  mat.w2 = 0.0F;
+  mat.w3 = 1.0F;
 
   return mat;
 }
 
-SC_SACD_Mat3 SC_SACD_Rotation_Mat3_YAxis(float y_radians) {
-  SC_SACD_Mat3 mat;
+SC_SACD_Mat4 SC_SACD_Rotation_Mat4_YAxis(float y_radians) {
+  SC_SACD_Mat4 mat;
 
   mat.x0 = std::cos(y_radians);
   mat.x1 = 0.0F;
   mat.x2 = std::sin(y_radians);
+  mat.x3 = 0.0F;
+
   mat.y0 = 0.0F;
   mat.y1 = 1.0F;
   mat.y2 = 0.0F;
+  mat.y3 = 0.0F;
+
   mat.z0 = -mat.x2;
   mat.z1 = 0.0F;
   mat.z2 = mat.x0;
+  mat.z3 = 0.0F;
+
+  mat.w0 = 0.0F;
+  mat.w1 = 0.0F;
+  mat.w2 = 0.0F;
+  mat.w3 = 1.0F;
 
   return mat;
 }
 
-SC_SACD_Mat3 SC_SACD_Rotation_Mat3_ZAxis(float z_radians) {
-  SC_SACD_Mat3 mat;
+SC_SACD_Mat4 SC_SACD_Rotation_Mat4_ZAxis(float z_radians) {
+  SC_SACD_Mat4 mat;
 
   mat.x0 = std::cos(z_radians);
   mat.x1 = -std::sin(z_radians);
   mat.x2 = 0.0F;
+  mat.x3 = 0.0F;
+
   mat.y0 = -mat.x1;
   mat.y1 = mat.x0;
   mat.y2 = 0.0F;
+  mat.y3 = 0.0F;
+
   mat.z0 = 0.0F;
   mat.z1 = 0.0F;
   mat.z2 = 1.0F;
+  mat.z3 = 0.0F;
+
+  mat.w0 = 0.0F;
+  mat.w1 = 0.0F;
+  mat.w2 = 0.0F;
+  mat.w3 = 1.0F;
 
   return mat;
 }
