@@ -543,6 +543,24 @@ int main() {
       CHECK_FLOAT(result.z, std::sqrt(2.0F) / 2.0F);
     }
   }
+
+  // Mat4 rotation and translation.
+  {
+    SC_SACD_Mat4 mat_a = SC_SACD_Translate_Mat4(1.0F, 1.0F, 1.0F);
+    SC_SACD_Mat4 mat_b =
+        SC_SACD_Rotation_Mat4_ZAxis(std::numbers::pi_v<float> / 4.0F);
+    mat_a = SC_SACD_Mat4_Mult(&mat_b, &mat_a);
+    mat_b = SC_SACD_Translate_Mat4(0.0F, 0.0F, -1.0F);
+    mat_a = SC_SACD_Mat4_Mult(&mat_b, &mat_a);
+
+    {
+      auto result =
+          SC_SACD_Mat4_Vec3_Mult(&mat_a, SC_SACD_Vec3{0.0F, 0.0F, 0.0F});
+      CHECK_FLOAT(result.x, 0.0F);
+      CHECK_FLOAT(result.z, 0.0F);
+      CHECK_FLOAT(result.y, std::sqrt(2.0F));
+    }
+  }
   std::cout << "Checks checked: " << checks_checked << '\n'
             << "Checks passed:  " << checks_passed << '\n';
 

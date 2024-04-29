@@ -111,6 +111,8 @@ SC_SACD_EXPORT SC_SACD_Mat4 SC_SACD_Rotation_Mat4_XAxis(float x_radians);
 SC_SACD_EXPORT SC_SACD_Mat4 SC_SACD_Rotation_Mat4_YAxis(float y_radians);
 SC_SACD_EXPORT SC_SACD_Mat4 SC_SACD_Rotation_Mat4_ZAxis(float z_radians);
 
+SC_SACD_EXPORT SC_SACD_Mat4 SC_SACD_Translate_Mat4(float x, float y, float z);
+
 SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Closest_Point_Dir_Normalized(
     const SC_SACD_Vec3 *pos, const SC_SACD_Vec3 *dir,
     const SC_SACD_Vec3 *point);
