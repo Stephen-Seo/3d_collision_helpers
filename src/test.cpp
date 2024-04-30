@@ -96,8 +96,10 @@ int main() {
 
   // Test Separating_Axis_Collision check.
   {
-    SC_SACD_Generic_Box a{0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F, 0.0F, 0.0F, 0.0F};
-    SC_SACD_Generic_Box b{0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F, 0.0F, 0.0F, 0.0F};
+    SC_SACD_Generic_Box a{
+        0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F, SC_SACD_Mat4_Identity()};
+    SC_SACD_Generic_Box b{
+        0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F, SC_SACD_Mat4_Identity()};
 
     CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
 
@@ -106,37 +108,37 @@ int main() {
     b.x = -1.1F;
     CHECK_FALSE(SC_SACD_Generic_Box_Collision(&a, &b));
 
-    a.z_radians = std::numbers::pi_v<float> / 4.0F;
-    b.z_radians = a.z_radians;
+    a.transform = SC_SACD_Rotation_Mat4_ZAxis(std::numbers::pi_v<float> / 4.0F);
+    b.transform = a.transform;
     CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
     b.x = 1.1F;
     CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
 
     b.x = 0.0F;
     b.y = 1.1F;
-    a.z_radians = 0.0F;
-    b.z_radians = 0.0F;
+    a.transform = SC_SACD_Mat4_Identity();
+    b.transform = a.transform;
     CHECK_FALSE(SC_SACD_Generic_Box_Collision(&a, &b));
     b.y = -1.1F;
     CHECK_FALSE(SC_SACD_Generic_Box_Collision(&a, &b));
 
-    a.z_radians = std::numbers::pi_v<float> / 4.0F;
-    b.z_radians = a.z_radians;
+    a.transform = SC_SACD_Rotation_Mat4_ZAxis(std::numbers::pi_v<float> / 4.0F);
+    b.transform = a.transform;
     CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
     b.y = 1.1F;
     CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
 
     b.y = 0.0F;
-    a.z_radians = 0.0F;
-    b.z_radians = 0.0F;
+    a.transform = SC_SACD_Mat4_Identity();
+    b.transform = a.transform;
 
     b.z = 1.1F;
     CHECK_FALSE(SC_SACD_Generic_Box_Collision(&a, &b));
     b.z = -1.1F;
     CHECK_FALSE(SC_SACD_Generic_Box_Collision(&a, &b));
 
-    a.y_radians = std::numbers::pi_v<float> / 4.0F;
-    b.y_radians = a.y_radians;
+    a.transform = SC_SACD_Rotation_Mat4_YAxis(std::numbers::pi_v<float> / 4.0F);
+    b.transform = a.transform;
     CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
     b.z = 1.1F;
     CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
@@ -236,9 +238,14 @@ int main() {
   // Test Sphere/Generic_Box collision check.
   {
     SC_SACD_Sphere sphere{0.0F, 0.0F, 0.0F, 1.0F};
-    SC_SACD_Generic_Box box{0.0F, 0.0F, 0.0F,
-                            2.0F, 2.0F, 2.0F,
-                            0.0F, 0.0F, std::numbers::pi_v<float> / 4.0F};
+    SC_SACD_Generic_Box box{
+        0.0F,
+        0.0F,
+        0.0F,
+        2.0F,
+        2.0F,
+        2.0F,
+        SC_SACD_Rotation_Mat4_ZAxis(std::numbers::pi_v<float> / 4.0F)};
 
     CHECK_TRUE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
 

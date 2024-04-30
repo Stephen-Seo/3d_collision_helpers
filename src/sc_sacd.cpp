@@ -65,19 +65,33 @@ std::vector<SC_SACD_Vec3> SC_SACD_Get_Box_Normals(
   std::vector<SC_SACD_Vec3> normals;
 
   normals.emplace_back(SC_SACD_Vec3{1.0F, 0.0F, 0.0F});
-  normals.back() = SC_SACD_Vec3_Rotate(normals.back(), box->x_radians,
-                                       box->y_radians, box->z_radians);
+  normals.back() = box->transform * normals.back();
 
   normals.emplace_back(SC_SACD_Vec3{0.0F, 1.0F, 0.0F});
-  normals.back() = SC_SACD_Vec3_Rotate(normals.back(), box->x_radians,
-                                       box->y_radians, box->z_radians);
+  normals.back() = box->transform * normals.back();
 
   normals.emplace_back(SC_SACD_Vec3{0.0F, 0.0F, 1.0F});
-  normals.back() = SC_SACD_Vec3_Rotate(normals.back(), box->x_radians,
-                                       box->y_radians, box->z_radians);
+  normals.back() = box->transform * normals.back();
 
-  // Not normalizing the normals on purpose for optimization. It should already
-  // be normalized as each normal is a rotated unit vector.
+  return normals;
+}
+
+std::vector<SC_SACD_Vec3> SC_SACD_Get_Box_Normals_Normalized(
+    const SC_SACD_Generic_Box *box) {
+  std::vector<SC_SACD_Vec3> normals;
+
+  normals.emplace_back(SC_SACD_Vec3{1.0F, 0.0F, 0.0F});
+  normals.back() = box->transform * normals.back();
+  normals.back() = normals.back() / SC_SACD_Vec3_Length(normals.back());
+
+  normals.emplace_back(SC_SACD_Vec3{0.0F, 1.0F, 0.0F});
+  normals.back() = box->transform * normals.back();
+  normals.back() = normals.back() / SC_SACD_Vec3_Length(normals.back());
+
+  normals.emplace_back(SC_SACD_Vec3{0.0F, 0.0F, 1.0F});
+  normals.back() = box->transform * normals.back();
+  normals.back() = normals.back() / SC_SACD_Vec3_Length(normals.back());
+
   return normals;
 }
 
@@ -85,55 +99,61 @@ std::vector<SC_SACD_Vec3> SC_SACD_Get_Box_Corners(
     const SC_SACD_Generic_Box *box) {
   std::vector<SC_SACD_Vec3> corners;
 
-  SC_SACD_Vec3 pos{box->x, box->y, box->z};
+  corners.push_back(box->transform * SC_SACD_Vec3{-box->width / 2.0F,
+                                                  -box->height / 2.0F,
+                                                  -box->depth / 2.0F});
+  corners.back().x += box->x;
+  corners.back().y += box->y;
+  corners.back().z += box->z;
 
-  corners.push_back(
-      SC_SACD_Vec3_Rotate(SC_SACD_Vec3{-box->width / 2.0F, -box->height / 2.0F,
-                                       -box->depth / 2.0F},
-                          box->x_radians, box->y_radians, box->z_radians) +
-      pos);
+  corners.push_back(box->transform * SC_SACD_Vec3{box->width / 2.0F,
+                                                  -box->height / 2.0F,
+                                                  -box->depth / 2.0F});
+  corners.back().x += box->x;
+  corners.back().y += box->y;
+  corners.back().z += box->z;
 
-  corners.push_back(
-      SC_SACD_Vec3_Rotate(SC_SACD_Vec3{box->width / 2.0F, -box->height / 2.0F,
-                                       -box->depth / 2.0F},
-                          box->x_radians, box->y_radians, box->z_radians) +
-      pos);
+  corners.push_back(box->transform * SC_SACD_Vec3{-box->width / 2.0F,
+                                                  box->height / 2.0F,
+                                                  -box->depth / 2.0F});
+  corners.back().x += box->x;
+  corners.back().y += box->y;
+  corners.back().z += box->z;
 
-  corners.push_back(
-      SC_SACD_Vec3_Rotate(SC_SACD_Vec3{-box->width / 2.0F, box->height / 2.0F,
-                                       -box->depth / 2.0F},
-                          box->x_radians, box->y_radians, box->z_radians) +
-      pos);
+  corners.push_back(box->transform * SC_SACD_Vec3{box->width / 2.0F,
+                                                  box->height / 2.0F,
+                                                  -box->depth / 2.0F});
+  corners.back().x += box->x;
+  corners.back().y += box->y;
+  corners.back().z += box->z;
 
-  corners.push_back(
-      SC_SACD_Vec3_Rotate(SC_SACD_Vec3{box->width / 2.0F, box->height / 2.0F,
-                                       -box->depth / 2.0F},
-                          box->x_radians, box->y_radians, box->z_radians) +
-      pos);
+  corners.push_back(box->transform * SC_SACD_Vec3{-box->width / 2.0F,
+                                                  -box->height / 2.0F,
+                                                  box->depth / 2.0F});
+  corners.back().x += box->x;
+  corners.back().y += box->y;
+  corners.back().z += box->z;
 
-  corners.push_back(
-      SC_SACD_Vec3_Rotate(SC_SACD_Vec3{-box->width / 2.0F, -box->height / 2.0F,
-                                       box->depth / 2.0F},
-                          box->x_radians, box->y_radians, box->z_radians) +
-      pos);
+  corners.push_back(box->transform * SC_SACD_Vec3{box->width / 2.0F,
+                                                  -box->height / 2.0F,
+                                                  box->depth / 2.0F});
+  corners.back().x += box->x;
+  corners.back().y += box->y;
+  corners.back().z += box->z;
 
-  corners.push_back(
-      SC_SACD_Vec3_Rotate(SC_SACD_Vec3{box->width / 2.0F, -box->height / 2.0F,
-                                       box->depth / 2.0F},
-                          box->x_radians, box->y_radians, box->z_radians) +
-      pos);
+  corners.push_back(box->transform * SC_SACD_Vec3{-box->width / 2.0F,
+                                                  box->height / 2.0F,
+                                                  box->depth / 2.0F});
+  corners.back().x += box->x;
+  corners.back().y += box->y;
+  corners.back().z += box->z;
 
-  corners.push_back(
-      SC_SACD_Vec3_Rotate(SC_SACD_Vec3{-box->width / 2.0F, box->height / 2.0F,
-                                       box->depth / 2.0F},
-                          box->x_radians, box->y_radians, box->z_radians) +
-      pos);
-
-  corners.push_back(
-      SC_SACD_Vec3_Rotate(SC_SACD_Vec3{box->width / 2.0F, box->height / 2.0F,
-                                       box->depth / 2.0F},
-                          box->x_radians, box->y_radians, box->z_radians) +
-      pos);
+  corners.push_back(box->transform * SC_SACD_Vec3{box->width / 2.0F,
+                                                  box->height / 2.0F,
+                                                  box->depth / 2.0F});
+  corners.back().x += box->x;
+  corners.back().y += box->y;
+  corners.back().z += box->z;
 
   return corners;
 }
@@ -226,9 +246,7 @@ int SC_SACD_AABB_Generic_Box_Collision(const SC_SACD_AABB_Box *a,
   a_conv.width = a->width;
   a_conv.height = a->height;
   a_conv.depth = a->depth;
-  a_conv.x_radians = 0.0F;
-  a_conv.y_radians = 0.0F;
-  a_conv.z_radians = 0.0F;
+  a_conv.transform = SC_SACD_Mat4_Identity();
   return SC_SACD_Generic_Box_Collision(&a_conv, b);
 }
 
@@ -477,4 +495,8 @@ SC_SACD_Vec3 SC_SACD_Closest_Point(const SC_SACD_Vec3 *pos,
       (SC_SACD_Dot_Product(*dir, *point) - SC_SACD_Dot_Product(*dir, *pos)) /
       SC_SACD_Dot_Product(*dir, *dir);
   return *pos + *dir * alpha;
+}
+
+float SC_SACD_Vec3_Length(const SC_SACD_Vec3 vec) {
+  return std::sqrt(SC_SACD_Dot_Product(vec, vec));
 }

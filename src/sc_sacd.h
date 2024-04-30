@@ -55,10 +55,8 @@ typedef struct SC_SACD_EXPORT SC_SACD_Generic_Box {
   float height;
   /// z-axis depth.
   float depth;
-  /// Rotation about center of box about axis.
-  float x_radians;
-  float y_radians;
-  float z_radians;
+  /// Local transform; expects center of box as origin.
+  SC_SACD_Mat4 transform;
 } SC_SACD_Generic_Box;
 
 typedef struct SC_SACD_EXPORT SC_SACD_Sphere {
@@ -106,6 +104,7 @@ SC_SACD_EXPORT SC_SACD_Mat4 SC_SACD_Mat4_Mult(const SC_SACD_Mat4 *a,
 SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Mat4_Vec3_Mult(const SC_SACD_Mat4 *mat,
                                                    const SC_SACD_Vec3 vec);
 
+/// Rotates by x-axis first, then y-axis, then finally z-axis.
 SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Vec3_Rotate(const SC_SACD_Vec3 vec,
                                                 float x_axis, float y_axis,
                                                 float z_axis);
@@ -123,6 +122,8 @@ SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Closest_Point_Dir_Normalized(
 SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Closest_Point(const SC_SACD_Vec3 *pos,
                                                   const SC_SACD_Vec3 *dir,
                                                   const SC_SACD_Vec3 *point);
+
+SC_SACD_EXPORT float SC_SACD_Vec3_Length(const SC_SACD_Vec3 vec);
 
 #ifdef __cplusplus
 }
