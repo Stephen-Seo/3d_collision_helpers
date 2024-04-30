@@ -80,12 +80,15 @@ SC_SACD_EXPORT int SC_SACD_Generic_Box_Collision(const SC_SACD_Generic_Box *a,
 SC_SACD_EXPORT int SC_SACD_AABB_Generic_Box_Collision(
     const SC_SACD_AABB_Box *a, const SC_SACD_Generic_Box *b);
 
+/// Returns non-zero if there is collision.
 SC_SACD_EXPORT int SC_SACD_Sphere_Collision(const SC_SACD_Sphere *a,
                                             const SC_SACD_Sphere *b);
 
+/// Returns non-zero if there is collision.
 SC_SACD_EXPORT int SC_SACD_Sphere_AABB_Box_Collision(
     const SC_SACD_Sphere *sphere, const SC_SACD_AABB_Box *box);
 
+/// Returns non-zero if there is collision.
 SC_SACD_EXPORT int SC_SACD_Sphere_Box_Collision(const SC_SACD_Sphere *sphere,
                                                 const SC_SACD_Generic_Box *box);
 
