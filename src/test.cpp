@@ -571,5 +571,5 @@ int main() {
   std::cout << "Checks checked: " << checks_checked << '\n'
             << "Checks passed:  " << checks_passed << '\n';
 
-  return 0;
+  return checks_checked == checks_passed ? 0 : 1;
 }
