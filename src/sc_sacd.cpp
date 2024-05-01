@@ -191,6 +191,12 @@ std::vector<SC_SACD_MinMax> SC_SACD_Get_Box_MinMax(
 // Private Helpers END
 // =============================================================================
 
+SC_SACD_Generic_Box SC_SACD_Generic_Box_Default() {
+  return {
+      0.0F, 0.0F, 0.0F, 2.0F, 2.0F, 2.0F, SC_SACD_Mat4_Identity(),
+  };
+}
+
 int SC_SACD_AABB_Box_Collision(const SC_SACD_AABB_Box *a,
                                const SC_SACD_AABB_Box *b) {
   float ax_min = a->x - a->width / 2.0F;

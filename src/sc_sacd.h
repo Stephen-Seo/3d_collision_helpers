@@ -44,6 +44,7 @@ typedef struct SC_SACD_EXPORT SC_SACD_AABB_Box {
   float depth;
 } SC_SACD_AABB_Box;
 
+/// Must not be zero initialized. Use SC_SACD_Generix_Box_Default() instead.
 typedef struct SC_SACD_EXPORT SC_SACD_Generic_Box {
   /// Coordinates are to center of box.
   float x;
@@ -65,6 +66,9 @@ typedef struct SC_SACD_EXPORT SC_SACD_Sphere {
   float z;
   float radius;
 } SC_SACD_Sphere;
+
+/// Returns a box at origin with width/height/depth of 2 each.
+SC_SACD_EXPORT SC_SACD_Generic_Box SC_SACD_Generic_Box_Default(void);
 
 /// Returns non-zero if there is collision.
 SC_SACD_EXPORT int SC_SACD_AABB_Box_Collision(const SC_SACD_AABB_Box *a,
