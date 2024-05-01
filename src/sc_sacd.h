@@ -119,10 +119,12 @@ SC_SACD_EXPORT SC_SACD_Mat4 SC_SACD_Rotation_Mat4_ZAxis(float z_radians);
 
 SC_SACD_EXPORT SC_SACD_Mat4 SC_SACD_Translate_Mat4(float x, float y, float z);
 
+/// This variant of Closest_Point expects "dir" to be a unit vector.
 SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Closest_Point_Dir_Normalized(
     const SC_SACD_Vec3 *pos, const SC_SACD_Vec3 *dir,
     const SC_SACD_Vec3 *point);
 
+/// This variant of Closest_Point expects "dir" to NOT be a unit vector.
 SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Closest_Point(const SC_SACD_Vec3 *pos,
                                                   const SC_SACD_Vec3 *dir,
                                                   const SC_SACD_Vec3 *point);
