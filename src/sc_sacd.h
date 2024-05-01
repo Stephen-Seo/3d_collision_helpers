@@ -24,11 +24,12 @@ typedef struct SC_SACD_EXPORT SC_SACD_Vec3 {
   float x, y, z;
 } SC_SACD_Vec3;
 
-typedef struct SC_SACD_EXPORT SC_SACD_Mat3 {
-  float x0, y0, z0;
-  float x1, y1, z1;
-  float x2, y2, z2;
-} SC_SACD_Mat3;
+typedef struct SC_SACD_EXPORT SC_SACD_Mat4 {
+  float x0, x1, x2, x3;
+  float y0, y1, y2, y3;
+  float z0, z1, z2, z3;
+  float w0, w1, w2, w3;
+} SC_SACD_Mat4;
 
 typedef struct SC_SACD_EXPORT SC_SACD_AABB_Box {
   /// Coordinates are to center of box.
@@ -43,6 +44,7 @@ typedef struct SC_SACD_EXPORT SC_SACD_AABB_Box {
   float depth;
 } SC_SACD_AABB_Box;
 
+/// Must not be zero initialized. Use SC_SACD_Generix_Box_Default() instead.
 typedef struct SC_SACD_EXPORT SC_SACD_Generic_Box {
   /// Coordinates are to center of box.
   float x;
@@ -54,11 +56,19 @@ typedef struct SC_SACD_EXPORT SC_SACD_Generic_Box {
   float height;
   /// z-axis depth.
   float depth;
-  /// Rotation about center of box about axis.
-  float x_radians;
-  float y_radians;
-  float z_radians;
+  /// Local transform; expects center of box as origin.
+  SC_SACD_Mat4 transform;
 } SC_SACD_Generic_Box;
+
+typedef struct SC_SACD_EXPORT SC_SACD_Sphere {
+  float x;
+  float y;
+  float z;
+  float radius;
+} SC_SACD_Sphere;
+
+/// Returns a box at origin with width/height/depth of 2 each.
+SC_SACD_EXPORT SC_SACD_Generic_Box SC_SACD_Generic_Box_Default(void);
 
 /// Returns non-zero if there is collision.
 SC_SACD_EXPORT int SC_SACD_AABB_Box_Collision(const SC_SACD_AABB_Box *a,
@@ -72,18 +82,54 @@ SC_SACD_EXPORT int SC_SACD_Generic_Box_Collision(const SC_SACD_Generic_Box *a,
 SC_SACD_EXPORT int SC_SACD_AABB_Generic_Box_Collision(
     const SC_SACD_AABB_Box *a, const SC_SACD_Generic_Box *b);
 
+/// Returns non-zero if there is collision.
+SC_SACD_EXPORT int SC_SACD_Sphere_Collision(const SC_SACD_Sphere *a,
+                                            const SC_SACD_Sphere *b);
+
+/// Returns non-zero if there is collision.
+SC_SACD_EXPORT int SC_SACD_Sphere_AABB_Box_Collision(
+    const SC_SACD_Sphere *sphere, const SC_SACD_AABB_Box *box);
+
+/// Returns non-zero if there is collision.
+SC_SACD_EXPORT int SC_SACD_Sphere_Box_Collision(const SC_SACD_Sphere *sphere,
+                                                const SC_SACD_Generic_Box *box);
+
 SC_SACD_EXPORT float SC_SACD_Dot_Product(const SC_SACD_Vec3 a,
                                          const SC_SACD_Vec3 b);
 
 SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Cross_Product(const SC_SACD_Vec3 a,
                                                   const SC_SACD_Vec3 b);
 
-SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Mat3_Vec3_Mult(const SC_SACD_Mat3 *mat,
+SC_SACD_EXPORT SC_SACD_Mat4 SC_SACD_Mat4_Identity(void);
+
+SC_SACD_EXPORT SC_SACD_Mat4 SC_SACD_Mat4_Mult(const SC_SACD_Mat4 *a,
+                                              const SC_SACD_Mat4 *b);
+
+SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Mat4_Vec3_Mult(const SC_SACD_Mat4 *mat,
                                                    const SC_SACD_Vec3 vec);
 
+/// Rotates by x-axis first, then y-axis, then finally z-axis.
 SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Vec3_Rotate(const SC_SACD_Vec3 vec,
                                                 float x_axis, float y_axis,
                                                 float z_axis);
+
+SC_SACD_EXPORT SC_SACD_Mat4 SC_SACD_Rotation_Mat4_XAxis(float x_radians);
+SC_SACD_EXPORT SC_SACD_Mat4 SC_SACD_Rotation_Mat4_YAxis(float y_radians);
+SC_SACD_EXPORT SC_SACD_Mat4 SC_SACD_Rotation_Mat4_ZAxis(float z_radians);
+
+SC_SACD_EXPORT SC_SACD_Mat4 SC_SACD_Translate_Mat4(float x, float y, float z);
+
+/// This variant of Closest_Point expects "dir" to be a unit vector.
+SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Closest_Point_Dir_Normalized(
+    const SC_SACD_Vec3 *pos, const SC_SACD_Vec3 *dir,
+    const SC_SACD_Vec3 *point);
+
+/// This variant of Closest_Point expects "dir" to NOT be a unit vector.
+SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Closest_Point(const SC_SACD_Vec3 *pos,
+                                                  const SC_SACD_Vec3 *dir,
+                                                  const SC_SACD_Vec3 *point);
+
+SC_SACD_EXPORT float SC_SACD_Vec3_Length(const SC_SACD_Vec3 vec);
 
 #ifdef __cplusplus
 }
