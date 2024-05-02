@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 2.0.1
+
+Added check in SC_SACD_Sphere_Box_Collision(...) to see if sphere and box has
+same center.
+
 ## Version 2.0.0
 
 Add collision detection with Spheres.
