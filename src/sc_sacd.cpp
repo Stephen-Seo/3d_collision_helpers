@@ -488,7 +488,7 @@ SC_SACD_Mat4 SC_SACD_Rotation_Mat4_ZAxis(float z_radians) {
 }
 
 SC_SACD_Mat4 SC_SACD_Translate_Mat4(float x, float y, float z) {
-  return SC_SACD_Mat4{0.0F, 0.0F, 0.0F, x, 0.0F, 1.0F, 0.0F, y,
+  return SC_SACD_Mat4{1.0F, 0.0F, 0.0F, x, 0.0F, 1.0F, 0.0F, y,
                       0.0F, 0.0F, 1.0F, z, 0.0F, 0.0F, 0.0F, 1.0F};
 }
 
