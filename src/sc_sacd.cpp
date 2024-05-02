@@ -63,34 +63,84 @@ SC_SACD_Vec3 operator*(const SC_SACD_Mat4 &mat, const SC_SACD_Vec3 &vec) {
 std::vector<SC_SACD_Vec3> SC_SACD_Get_Box_Normals(
     const SC_SACD_Generic_Box *box) {
   std::vector<SC_SACD_Vec3> normals;
+  SC_SACD_Vec3 a, b, c;
 
-  normals.emplace_back(SC_SACD_Vec3{1.0F, 0.0F, 0.0F});
-  normals.back() = box->transform * normals.back();
+  // Facing positive x-axis.
+  a.x = 0.0F;
+  a.y = 0.0F;
+  a.z = 0.0F;
 
-  normals.emplace_back(SC_SACD_Vec3{0.0F, 1.0F, 0.0F});
-  normals.back() = box->transform * normals.back();
+  b.x = 0.0F;
+  b.y = 1.0F;
+  b.z = 0.0F;
 
-  normals.emplace_back(SC_SACD_Vec3{0.0F, 0.0F, 1.0F});
-  normals.back() = box->transform * normals.back();
+  c.x = 0.0F;
+  c.y = 0.0F;
+  c.z = 1.0F;
+
+  a = box->transform * a;
+  b = box->transform * b;
+  c = box->transform * c;
+
+  b = b - a;
+  c = c - a;
+
+  normals.push_back(SC_SACD_Cross_Product(b, c));
+
+  // Facing positive y-axis.
+  a.x = 0.0F;
+  a.y = 0.0F;
+  a.z = 0.0F;
+
+  b.x = 1.0F;
+  b.y = 0.0F;
+  b.z = 0.0F;
+
+  c.x = 0.0F;
+  c.y = 0.0F;
+  c.z = -1.0F;
+
+  a = box->transform * a;
+  b = box->transform * b;
+  c = box->transform * c;
+
+  b = b - a;
+  c = c - a;
+
+  normals.push_back(SC_SACD_Cross_Product(b, c));
+
+  // Facing positive z-axis.
+  a.x = 0.0F;
+  a.y = 0.0F;
+  a.z = 0.0F;
+
+  b.x = 0.0F;
+  b.y = 1.0F;
+  b.z = 0.0F;
+
+  c.x = -1.0F;
+  c.y = 0.0F;
+  c.z = 0.0F;
+
+  a = box->transform * a;
+  b = box->transform * b;
+  c = box->transform * c;
+
+  b = b - a;
+  c = c - a;
+
+  normals.push_back(SC_SACD_Cross_Product(b, c));
 
   return normals;
 }
 
 std::vector<SC_SACD_Vec3> SC_SACD_Get_Box_Normals_Normalized(
     const SC_SACD_Generic_Box *box) {
-  std::vector<SC_SACD_Vec3> normals;
+  std::vector<SC_SACD_Vec3> normals = SC_SACD_Get_Box_Normals(box);
 
-  normals.emplace_back(SC_SACD_Vec3{1.0F, 0.0F, 0.0F});
-  normals.back() = box->transform * normals.back();
-  normals.back() = normals.back() / SC_SACD_Vec3_Length(normals.back());
-
-  normals.emplace_back(SC_SACD_Vec3{0.0F, 1.0F, 0.0F});
-  normals.back() = box->transform * normals.back();
-  normals.back() = normals.back() / SC_SACD_Vec3_Length(normals.back());
-
-  normals.emplace_back(SC_SACD_Vec3{0.0F, 0.0F, 1.0F});
-  normals.back() = box->transform * normals.back();
-  normals.back() = normals.back() / SC_SACD_Vec3_Length(normals.back());
+  for (auto &normal : normals) {
+    normal = normal / std::sqrt(SC_SACD_Dot_Product(normal, normal));
+  }
 
   return normals;
 }
@@ -488,7 +538,7 @@ SC_SACD_Mat4 SC_SACD_Rotation_Mat4_ZAxis(float z_radians) {
 }
 
 SC_SACD_Mat4 SC_SACD_Translate_Mat4(float x, float y, float z) {
-  return SC_SACD_Mat4{0.0F, 0.0F, 0.0F, x, 0.0F, 1.0F, 0.0F, y,
+  return SC_SACD_Mat4{1.0F, 0.0F, 0.0F, x, 0.0F, 1.0F, 0.0F, y,
                       0.0F, 0.0F, 1.0F, z, 0.0F, 0.0F, 0.0F, 1.0F};
 }
 
