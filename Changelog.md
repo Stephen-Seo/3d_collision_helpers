@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 2.0.2
+
+Fix SC_SACD_Translate_Mat4(...). It was missing a "1" in the first element of
+the Mat4.
+
+Made internal function getting normals of a box more robust.
+
 ## Version 2.0.1
 
 Added check in SC_SACD_Sphere_Box_Collision(...) to see if sphere and box has
