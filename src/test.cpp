@@ -568,6 +568,29 @@ int main() {
       CHECK_FLOAT(result.y, std::sqrt(2.0F));
     }
   }
+
+  // Box collision with transform that has translation.
+  {
+    SC_SACD_Generic_Box a = SC_SACD_Generic_Box_Default();
+    SC_SACD_Generic_Box b = SC_SACD_Generic_Box_Default();
+
+    a.width = 1.1F;
+    a.height = 1.1F;
+    b.width = 1.1F;
+    b.height = 1.1F;
+    a.transform = SC_SACD_Translate_Mat4(-1.0F, 0.0F, 0.0F);
+    b.transform = SC_SACD_Translate_Mat4(0.0F, -1.0F, 0.0F);
+
+    CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
+
+    a.width = 0.9F;
+    a.height = 0.9F;
+    b.width = 0.9F;
+    b.height = 0.9F;
+
+    CHECK_FALSE(SC_SACD_Generic_Box_Collision(&a, &b));
+  }
+
   std::cout << "Checks checked: " << checks_checked << '\n'
             << "Checks passed:  " << checks_passed << '\n';
 
