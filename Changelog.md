@@ -1,5 +1,9 @@
 # Changelog
 
+## Upcoming Changes
+
+Refactoring of internally used function(s).
+
 ## Version 2.0.2
 
 Fix SC_SACD_Translate_Mat4(...). It was missing a "1" in the first element of
