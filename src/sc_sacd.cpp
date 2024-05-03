@@ -362,10 +362,8 @@ int SC_SACD_Sphere_Box_Collision(const SC_SACD_Sphere *sphere,
       sphere_box_normal /
       std::sqrt(SC_SACD_Dot_Product(sphere_box_normal, sphere_box_normal));
 
-  std::vector<SC_SACD_Vec3> normals{sphere_box_normal};
-
   std::vector<SC_SACD_MinMax> box_minmaxes =
-      SC_SACD_Get_Box_MinMax(box, normals);
+      SC_SACD_Get_Box_MinMax(box, {&sphere_box_normal, 1});
 
   float projected_0 = SC_SACD_Dot_Product(
       sphere_box_normal, sphere_pos + sphere_box_normal * sphere->radius);
