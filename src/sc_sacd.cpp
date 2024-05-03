@@ -1,6 +1,7 @@
 #include "sc_sacd.h"
 
 // Standard library includes.
+#include <array>
 #include <cmath>
 #include <stdfloat>
 #include <vector>
@@ -60,9 +61,8 @@ SC_SACD_Vec3 operator*(const SC_SACD_Mat4 &mat, const SC_SACD_Vec3 &vec) {
       vec.x * mat.z0 + vec.y * mat.z1 + vec.z * mat.z2 + mat.z3};
 }
 
-std::vector<SC_SACD_Vec3> SC_SACD_Get_Box_Normals(
+std::array<SC_SACD_Vec3, 3> SC_SACD_Get_Box_Normals(
     const SC_SACD_Generic_Box *box) {
-  std::vector<SC_SACD_Vec3> normals;
   SC_SACD_Vec3 a, b, c;
 
   // Facing positive x-axis.
@@ -85,7 +85,7 @@ std::vector<SC_SACD_Vec3> SC_SACD_Get_Box_Normals(
   b = b - a;
   c = c - a;
 
-  normals.push_back(SC_SACD_Cross_Product(b, c));
+  auto normal_x = SC_SACD_Cross_Product(b, c);
 
   // Facing positive y-axis.
   a.x = 0.0F;
@@ -107,7 +107,7 @@ std::vector<SC_SACD_Vec3> SC_SACD_Get_Box_Normals(
   b = b - a;
   c = c - a;
 
-  normals.push_back(SC_SACD_Cross_Product(b, c));
+  auto normal_y = SC_SACD_Cross_Product(b, c);
 
   // Facing positive z-axis.
   a.x = 0.0F;
@@ -129,14 +129,14 @@ std::vector<SC_SACD_Vec3> SC_SACD_Get_Box_Normals(
   b = b - a;
   c = c - a;
 
-  normals.push_back(SC_SACD_Cross_Product(b, c));
+  auto normal_z = SC_SACD_Cross_Product(b, c);
 
-  return normals;
+  return {normal_x, normal_y, normal_z};
 }
 
-std::vector<SC_SACD_Vec3> SC_SACD_Get_Box_Normals_Normalized(
+std::array<SC_SACD_Vec3, 3> SC_SACD_Get_Box_Normals_Normalized(
     const SC_SACD_Generic_Box *box) {
-  std::vector<SC_SACD_Vec3> normals = SC_SACD_Get_Box_Normals(box);
+  auto normals = SC_SACD_Get_Box_Normals(box);
 
   for (auto &normal : normals) {
     normal = normal / std::sqrt(SC_SACD_Dot_Product(normal, normal));
@@ -213,17 +213,18 @@ struct SC_SACD_MinMax {
 };
 
 std::vector<SC_SACD_MinMax> SC_SACD_Get_Box_MinMax(
-    const SC_SACD_Generic_Box *box, const std::vector<SC_SACD_Vec3> &normals) {
+    const SC_SACD_Generic_Box *box, const SC_SACD_Vec3 *normals,
+    std::size_t size) {
   std::vector<SC_SACD_MinMax> minmaxes;
 
   std::vector<SC_SACD_Vec3> corners = SC_SACD_Get_Box_Corners(box);
 
   // Assuming normals are not normalized, and will not normalize anyway.
   // MinMax count should be same as normals count.
-  for (const auto &normal : normals) {
+  for (std::size_t idx = 0; idx < size; ++idx) {
     SC_SACD_MinMax minmax{INFINITY, -INFINITY};
     for (const auto &corner : corners) {
-      float projected = SC_SACD_Dot_Product(corner, normal);
+      float projected = SC_SACD_Dot_Product(corner, normals[idx]);
       if (projected > minmax.max) {
         minmax.max = projected;
       }
@@ -272,14 +273,21 @@ int SC_SACD_AABB_Box_Collision(const SC_SACD_AABB_Box *a,
 int SC_SACD_Generic_Box_Collision(const SC_SACD_Generic_Box *a,
                                   const SC_SACD_Generic_Box *b) {
   // Get all normals.
-  std::vector<SC_SACD_Vec3> normals = SC_SACD_Get_Box_Normals(a);
-  for (const auto &normal : SC_SACD_Get_Box_Normals(b)) {
-    normals.push_back(normal);
+  std::vector<SC_SACD_Vec3> normals;
+  {
+    for (const auto &normal : SC_SACD_Get_Box_Normals(a)) {
+      normals.push_back(normal);
+    }
+    for (const auto &normal : SC_SACD_Get_Box_Normals(b)) {
+      normals.push_back(normal);
+    }
   }
 
   // Get all minmaxes.
-  std::vector<SC_SACD_MinMax> minmaxes_a = SC_SACD_Get_Box_MinMax(a, normals);
-  std::vector<SC_SACD_MinMax> minmaxes_b = SC_SACD_Get_Box_MinMax(b, normals);
+  std::vector<SC_SACD_MinMax> minmaxes_a =
+      SC_SACD_Get_Box_MinMax(a, normals.data(), normals.size());
+  std::vector<SC_SACD_MinMax> minmaxes_b =
+      SC_SACD_Get_Box_MinMax(b, normals.data(), normals.size());
 
   // Check minmaxes.
   for (unsigned int i = 0; i < normals.size(); ++i) {
@@ -359,7 +367,7 @@ int SC_SACD_Sphere_Box_Collision(const SC_SACD_Sphere *sphere,
   std::vector<SC_SACD_Vec3> normals{sphere_box_normal};
 
   std::vector<SC_SACD_MinMax> box_minmaxes =
-      SC_SACD_Get_Box_MinMax(box, normals);
+      SC_SACD_Get_Box_MinMax(box, normals.data(), normals.size());
 
   float projected_0 = SC_SACD_Dot_Product(
       sphere_box_normal, sphere_pos + sphere_box_normal * sphere->radius);
@@ -377,13 +385,14 @@ int SC_SACD_Sphere_Box_Collision(const SC_SACD_Sphere *sphere,
 
   // Next check the planes for the 3 normals of the box.
 
-  normals = SC_SACD_Get_Box_Normals(box);
-  box_minmaxes = SC_SACD_Get_Box_MinMax(box, normals);
-  for (unsigned int i = 0; i < normals.size(); ++i) {
-    projected_0 = SC_SACD_Dot_Product(normals[i],
-                                      sphere_pos + normals[i] * sphere->radius);
-    projected_1 = SC_SACD_Dot_Product(normals[i],
-                                      sphere_pos - normals[i] * sphere->radius);
+  auto box_normals = SC_SACD_Get_Box_Normals(box);
+  box_minmaxes =
+      SC_SACD_Get_Box_MinMax(box, box_normals.data(), box_normals.size());
+  for (unsigned int i = 0; i < box_normals.size(); ++i) {
+    projected_0 = SC_SACD_Dot_Product(
+        box_normals[i], sphere_pos + box_normals[i] * sphere->radius);
+    projected_1 = SC_SACD_Dot_Product(
+        box_normals[i], sphere_pos - box_normals[i] * sphere->radius);
     if (projected_0 < projected_1) {
       if (box_minmaxes[i].max < projected_0 ||
           box_minmaxes[i].min > projected_1) {
