@@ -572,3 +572,58 @@ SC_SACD_Vec3 SC_SACD_Closest_Point(const SC_SACD_Vec3 *pos,
 float SC_SACD_Vec3_Length(const SC_SACD_Vec3 vec) {
   return std::sqrt(SC_SACD_Dot_Product(vec, vec));
 }
+
+SC_SACD_AABB_Box SC_SACD_Sphere_To_AABB(const SC_SACD_Sphere s) {
+  SC_SACD_AABB_Box aabb{};
+
+  aabb.x = s.x;
+  aabb.y = s.y;
+  aabb.z = s.z;
+
+  aabb.width = s.radius * 2.0F;
+  aabb.height = s.radius * 2.0F;
+  aabb.depth = s.radius * 2.0F;
+
+  return aabb;
+}
+
+SC_SACD_AABB_Box SC_SACD_Generic_Box_To_AABB(const SC_SACD_Generic_Box s) {
+  SC_SACD_AABB_Box aabb{};
+
+  auto corners = SC_SACD_Get_Box_Corners(&s);
+
+  SC_SACD_Vec3 min{INFINITY, INFINITY, INFINITY};
+  SC_SACD_Vec3 max{-INFINITY, -INFINITY, -INFINITY};
+
+  for (const auto &corner : corners) {
+    if (corner.x < min.x) {
+      min.x = corner.x;
+    }
+    if (corner.y < min.y) {
+      min.y = corner.y;
+    }
+    if (corner.z < min.z) {
+      min.z = corner.z;
+    }
+
+    if (corner.x > max.x) {
+      max.x = corner.x;
+    }
+    if (corner.y > max.y) {
+      max.y = corner.y;
+    }
+    if (corner.z > max.z) {
+      max.z = corner.z;
+    }
+  }
+
+  aabb.width = max.x - min.x;
+  aabb.height = max.y - min.y;
+  aabb.depth = max.z - min.z;
+
+  aabb.x = min.x + aabb.width / 2.0F;
+  aabb.y = min.y + aabb.height / 2.0F;
+  aabb.z = min.z + aabb.depth / 2.0F;
+
+  return aabb;
+}

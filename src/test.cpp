@@ -633,6 +633,54 @@ int main() {
     CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
   }
 
+  // Test Sphere/GenericBox to AABB.
+  {
+    SC_SACD_Sphere s{10.0F, 10.0F, 10.0F, 5.0F};
+
+    SC_SACD_AABB_Box aabb = SC_SACD_Sphere_To_AABB(s);
+    CHECK_FLOAT(aabb.x, s.x);
+    CHECK_FLOAT(aabb.y, s.y);
+    CHECK_FLOAT(aabb.z, s.z);
+    CHECK_FLOAT(aabb.width, s.radius * 2.0F);
+    CHECK_FLOAT(aabb.height, s.radius * 2.0F);
+    CHECK_FLOAT(aabb.depth, s.radius * 2.0F);
+
+    SC_SACD_Generic_Box box = SC_SACD_Generic_Box_Default();
+    box.x = 20.0F;
+    box.y = 20.0F;
+    box.z = 20.0F;
+
+    aabb = SC_SACD_Generic_Box_To_AABB(box);
+    CHECK_FLOAT(aabb.x, box.x);
+    CHECK_FLOAT(aabb.y, box.y);
+    CHECK_FLOAT(aabb.z, box.z);
+    CHECK_FLOAT(aabb.width, box.width);
+    CHECK_FLOAT(aabb.height, box.height);
+    CHECK_FLOAT(aabb.depth, box.depth);
+
+    box.transform =
+        SC_SACD_Rotation_Mat4_ZAxis(std::numbers::pi_v<float> / 4.0F);
+
+    aabb = SC_SACD_Generic_Box_To_AABB(box);
+    CHECK_FLOAT(aabb.x, box.x);
+    CHECK_FLOAT(aabb.y, box.y);
+    CHECK_FLOAT(aabb.z, box.z);
+    CHECK_FLOAT(aabb.width, std::sqrt(2.0F) * 2.0F);
+    CHECK_FLOAT(aabb.height, std::sqrt(2.0F) * 2.0F);
+    CHECK_FLOAT(aabb.depth, box.depth);
+
+    auto translate = SC_SACD_Translate_Mat4(-5.0F, -4.0F, 1.0F);
+    box.transform = SC_SACD_Mat4_Mult(&translate, &box.transform);
+
+    aabb = SC_SACD_Generic_Box_To_AABB(box);
+    CHECK_FLOAT(aabb.x, box.x - 5.0F);
+    CHECK_FLOAT(aabb.y, box.y - 4.0F);
+    CHECK_FLOAT(aabb.z, box.z + 1.0F);
+    CHECK_FLOAT(aabb.width, std::sqrt(2.0F) * 2.0F);
+    CHECK_FLOAT(aabb.height, std::sqrt(2.0F) * 2.0F);
+    CHECK_FLOAT(aabb.depth, box.depth);
+  }
+
   std::cout << "Checks checked: " << checks_checked << '\n'
             << "Checks passed:  " << checks_passed << '\n';
 

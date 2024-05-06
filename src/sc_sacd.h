@@ -133,6 +133,10 @@ SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Closest_Point(const SC_SACD_Vec3 *pos,
 
 SC_SACD_EXPORT float SC_SACD_Vec3_Length(const SC_SACD_Vec3 vec);
 
+SC_SACD_EXPORT SC_SACD_AABB_Box SC_SACD_Sphere_To_AABB(const SC_SACD_Sphere s);
+SC_SACD_EXPORT SC_SACD_AABB_Box
+SC_SACD_Generic_Box_To_AABB(const SC_SACD_Generic_Box s);
+
 #ifdef __cplusplus
 }
 #endif
