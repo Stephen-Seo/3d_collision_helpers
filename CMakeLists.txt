@@ -6,7 +6,7 @@ set(SC_3D_CollisionDetectionHelpers_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/src/sc_
 
 add_library(SC_3D_CollisionDetectionHelpers ${SC_3D_CollisionDetectionHelpers_SOURCES})
 
-set_target_properties(SC_3D_CollisionDetectionHelpers PROPERTIES VERSION 2.0.2 SOVERSION 2)
+set_target_properties(SC_3D_CollisionDetectionHelpers PROPERTIES VERSION 2.1.0 SOVERSION 2)
 target_compile_features(SC_3D_CollisionDetectionHelpers PUBLIC cxx_std_20)
 
 if(NOT DEFINED CMAKE_BUILD_TYPE OR "${CMAKE_BUILD_TYPE}" STREQUAL "")
