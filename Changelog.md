@@ -1,5 +1,9 @@
 # Changelog
 
+## Upcoming Changes
+
+Refactoring of internally used function.
+
 ## Version 2.1.0
 
 Refactoring of internally used function(s).
