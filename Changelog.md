@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming Changes
+## Version 2.2.0
 
 Refactoring of internally used function.
 
