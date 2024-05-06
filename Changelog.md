@@ -6,6 +6,8 @@ Refactoring of internally used function.
 
 Add functions to convert Sphere and GenericBox to AABB.
 
+Add function to combine two AABBs.
+
 ## Version 2.1.0
 
 Refactoring of internally used function(s).
