@@ -350,25 +350,25 @@ int SC_SACD_Sphere_Box_Collision(const SC_SACD_Sphere *sphere,
   // First check plane where normal = box_pos - sphere_pos.
 
   SC_SACD_Vec3 sphere_pos{sphere->x, sphere->y, sphere->z};
-  SC_SACD_Vec3 sphere_box_normal =
-      SC_SACD_Vec3{box->x, box->y, box->z} - sphere_pos;
-  if (sphere_box_normal.x < 0.0001F && sphere_box_normal.x > -0.0001F &&
-      sphere_box_normal.y < 0.0001F && sphere_box_normal.y > -0.0001F &&
-      sphere_box_normal.z < 0.0001F && sphere_box_normal.z > -0.0001F) {
+  std::array<SC_SACD_Vec3, 1> sphere_box_normal = {
+      SC_SACD_Vec3{box->x, box->y, box->z} - sphere_pos};
+  if (sphere_box_normal[0].x < 0.0001F && sphere_box_normal[0].x > -0.0001F &&
+      sphere_box_normal[0].y < 0.0001F && sphere_box_normal[0].y > -0.0001F &&
+      sphere_box_normal[0].z < 0.0001F && sphere_box_normal[0].z > -0.0001F) {
     // Sphere center is box center.
     return 1;
   }
-  sphere_box_normal =
-      sphere_box_normal /
-      std::sqrt(SC_SACD_Dot_Product(sphere_box_normal, sphere_box_normal));
+  sphere_box_normal[0] =
+      sphere_box_normal[0] / std::sqrt(SC_SACD_Dot_Product(
+                                 sphere_box_normal[0], sphere_box_normal[0]));
 
   std::vector<SC_SACD_MinMax> box_minmaxes =
-      SC_SACD_Get_Box_MinMax(box, {&sphere_box_normal, 1});
+      SC_SACD_Get_Box_MinMax(box, sphere_box_normal);
 
   float projected_0 = SC_SACD_Dot_Product(
-      sphere_box_normal, sphere_pos + sphere_box_normal * sphere->radius);
+      sphere_box_normal[0], sphere_pos + sphere_box_normal[0] * sphere->radius);
   float projected_1 = SC_SACD_Dot_Product(
-      sphere_box_normal, sphere_pos - sphere_box_normal * sphere->radius);
+      sphere_box_normal[0], sphere_pos - sphere_box_normal[0] * sphere->radius);
   if (projected_0 < projected_1) {
     if (box_minmaxes[0].max < projected_0 ||
         box_minmaxes[0].min > projected_1) {
