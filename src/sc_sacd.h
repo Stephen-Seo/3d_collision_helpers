@@ -137,6 +137,10 @@ SC_SACD_EXPORT SC_SACD_AABB_Box SC_SACD_Sphere_To_AABB(const SC_SACD_Sphere s);
 SC_SACD_EXPORT SC_SACD_AABB_Box
 SC_SACD_Generic_Box_To_AABB(const SC_SACD_Generic_Box s);
 
+/// Combines AABB's such that the new AABB encompasses the two AABB's.
+SC_SACD_EXPORT SC_SACD_AABB_Box SC_SACD_AABB_Combine(const SC_SACD_AABB_Box a,
+                                                     const SC_SACD_AABB_Box b);
+
 #ifdef __cplusplus
 }
 #endif

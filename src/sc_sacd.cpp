@@ -627,3 +627,55 @@ SC_SACD_AABB_Box SC_SACD_Generic_Box_To_AABB(const SC_SACD_Generic_Box s) {
 
   return aabb;
 }
+
+SC_SACD_AABB_Box SC_SACD_AABB_Combine(const SC_SACD_AABB_Box a,
+                                      const SC_SACD_AABB_Box b) {
+  SC_SACD_Vec3 min, max;
+
+  // Populate min values.
+
+  float temp_a = a.x - a.width / 2.0F;
+  float temp_b = b.x - b.width / 2.0F;
+
+  min.x = temp_a < temp_b ? temp_a : temp_b;
+
+  temp_a = a.y - a.height / 2.0F;
+  temp_b = b.y - b.height / 2.0F;
+
+  min.y = temp_a < temp_b ? temp_a : temp_b;
+
+  temp_a = a.z - a.depth / 2.0F;
+  temp_b = b.z - b.depth / 2.0F;
+
+  min.z = temp_a < temp_b ? temp_a : temp_b;
+
+  // Populate max values.
+
+  temp_a = a.x + a.width / 2.0F;
+  temp_b = b.x + b.width / 2.0F;
+
+  max.x = temp_a > temp_b ? temp_a : temp_b;
+
+  temp_a = a.y + a.height / 2.0F;
+  temp_b = b.y + b.height / 2.0F;
+
+  max.y = temp_a > temp_b ? temp_a : temp_b;
+
+  temp_a = a.z + a.depth / 2.0F;
+  temp_b = b.z + b.depth / 2.0F;
+
+  max.z = temp_a > temp_b ? temp_a : temp_b;
+
+  // Populate the result.
+
+  temp_a = max.x - min.x;
+  temp_b = max.y - min.y;
+  float temp_c = max.z - min.z;
+
+  return SC_SACD_AABB_Box{min.x + temp_a / 2.0F,
+                          min.y + temp_b / 2.0F,
+                          min.z + temp_c / 2.0F,
+                          temp_a,
+                          temp_b,
+                          temp_c};
+}

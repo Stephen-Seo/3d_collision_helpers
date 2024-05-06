@@ -681,6 +681,21 @@ int main() {
     CHECK_FLOAT(aabb.depth, box.depth);
   }
 
+  // Test combining AABB.
+  {
+    SC_SACD_AABB_Box a{5.0F, 5.0F, 5.0F, 2.0F, 2.0F, 2.0F};
+
+    SC_SACD_AABB_Box b{-3.0F, -3.0F, -3.0F, 2.0F, 2.0F, 2.0F};
+
+    auto combined = SC_SACD_AABB_Combine(a, b);
+    CHECK_FLOAT(combined.x, (7.0F - 5.0F) / 2.0F);
+    CHECK_FLOAT(combined.y, (7.0F - 5.0F) / 2.0F);
+    CHECK_FLOAT(combined.z, (7.0F - 5.0F) / 2.0F);
+    CHECK_FLOAT(combined.width, 10.0F);
+    CHECK_FLOAT(combined.height, 10.0F);
+    CHECK_FLOAT(combined.depth, 10.0F);
+  }
+
   std::cout << "Checks checked: " << checks_checked << '\n'
             << "Checks passed:  " << checks_passed << '\n';
 
