@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 2.1.0
+
+Refactoring of internally used function(s).
+
+This library now requires a compiler that supports C++20.
+
+Add SC_SACD_Scale_Mat4(...) fn.
+
 ## Version 2.0.2
 
 Fix SC_SACD_Translate_Mat4(...). It was missing a "1" in the first element of

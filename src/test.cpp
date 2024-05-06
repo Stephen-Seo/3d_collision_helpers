@@ -591,6 +591,48 @@ int main() {
     CHECK_FALSE(SC_SACD_Generic_Box_Collision(&a, &b));
   }
 
+  // Box with Scale Mat4.
+  {
+    SC_SACD_Generic_Box a = SC_SACD_Generic_Box_Default();
+    SC_SACD_Generic_Box b = SC_SACD_Generic_Box_Default();
+
+    a.x = 1.1F;
+    b.x = -1.1F;
+    CHECK_FALSE(SC_SACD_Generic_Box_Collision(&a, &b));
+
+    a.transform = SC_SACD_Scale_Mat4(2.0F, 1.0F, 1.0F);
+    CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
+
+    a.transform = SC_SACD_Scale_Mat4(-2.0F, 1.0F, 1.0F);
+    CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
+
+    a.x = 0.0F;
+    b.x = 0.0F;
+    a.y = 1.1F;
+    b.y = -1.1F;
+    a.transform = SC_SACD_Mat4_Identity();
+    CHECK_FALSE(SC_SACD_Generic_Box_Collision(&a, &b));
+
+    a.transform = SC_SACD_Scale_Mat4(1.0F, 2.0F, 1.0F);
+    CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
+
+    a.transform = SC_SACD_Scale_Mat4(1.0F, -2.0F, 1.0F);
+    CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
+
+    a.y = 0.0F;
+    b.y = 0.0F;
+    a.z = 1.1F;
+    b.z = -1.1F;
+    a.transform = SC_SACD_Mat4_Identity();
+    CHECK_FALSE(SC_SACD_Generic_Box_Collision(&a, &b));
+
+    a.transform = SC_SACD_Scale_Mat4(1.0F, 1.0F, 2.0F);
+    CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
+
+    a.transform = SC_SACD_Scale_Mat4(1.0F, 1.0F, -2.0F);
+    CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
+  }
+
   std::cout << "Checks checked: " << checks_checked << '\n'
             << "Checks passed:  " << checks_passed << '\n';
 
