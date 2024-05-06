@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 2.2.1
+
+Fix UnitTest for checking AABB.
+
 ## Version 2.2.0
 
 Refactoring of internally used function.
