@@ -133,6 +133,14 @@ SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Closest_Point(const SC_SACD_Vec3 *pos,
 
 SC_SACD_EXPORT float SC_SACD_Vec3_Length(const SC_SACD_Vec3 vec);
 
+SC_SACD_EXPORT SC_SACD_AABB_Box SC_SACD_Sphere_To_AABB(const SC_SACD_Sphere s);
+SC_SACD_EXPORT SC_SACD_AABB_Box
+SC_SACD_Generic_Box_To_AABB(const SC_SACD_Generic_Box s);
+
+/// Combines AABB's such that the new AABB encompasses the two AABB's.
+SC_SACD_EXPORT SC_SACD_AABB_Box SC_SACD_AABB_Combine(const SC_SACD_AABB_Box a,
+                                                     const SC_SACD_AABB_Box b);
+
 #ifdef __cplusplus
 }
 #endif

@@ -146,67 +146,68 @@ std::array<SC_SACD_Vec3, 3> SC_SACD_Get_Box_Normals_Normalized(
   return normals;
 }
 
-std::vector<SC_SACD_Vec3> SC_SACD_Get_Box_Corners(
+std::array<SC_SACD_Vec3, 8> SC_SACD_Get_Box_Corners(
     const SC_SACD_Generic_Box *box) {
-  std::vector<SC_SACD_Vec3> corners;
+  SC_SACD_Vec3 corner_0 =
+      box->transform *
+      SC_SACD_Vec3{-box->width / 2.0F, -box->height / 2.0F, -box->depth / 2.0F};
+  corner_0.x += box->x;
+  corner_0.y += box->y;
+  corner_0.z += box->z;
 
-  corners.push_back(box->transform * SC_SACD_Vec3{-box->width / 2.0F,
-                                                  -box->height / 2.0F,
-                                                  -box->depth / 2.0F});
-  corners.back().x += box->x;
-  corners.back().y += box->y;
-  corners.back().z += box->z;
+  SC_SACD_Vec3 corner_1 =
+      box->transform *
+      SC_SACD_Vec3{box->width / 2.0F, -box->height / 2.0F, -box->depth / 2.0F};
+  corner_1.x += box->x;
+  corner_1.y += box->y;
+  corner_1.z += box->z;
 
-  corners.push_back(box->transform * SC_SACD_Vec3{box->width / 2.0F,
-                                                  -box->height / 2.0F,
-                                                  -box->depth / 2.0F});
-  corners.back().x += box->x;
-  corners.back().y += box->y;
-  corners.back().z += box->z;
+  SC_SACD_Vec3 corner_2 =
+      box->transform *
+      SC_SACD_Vec3{-box->width / 2.0F, box->height / 2.0F, -box->depth / 2.0F};
+  corner_2.x += box->x;
+  corner_2.y += box->y;
+  corner_2.z += box->z;
 
-  corners.push_back(box->transform * SC_SACD_Vec3{-box->width / 2.0F,
-                                                  box->height / 2.0F,
-                                                  -box->depth / 2.0F});
-  corners.back().x += box->x;
-  corners.back().y += box->y;
-  corners.back().z += box->z;
+  SC_SACD_Vec3 corner_3 =
+      box->transform *
+      SC_SACD_Vec3{box->width / 2.0F, box->height / 2.0F, -box->depth / 2.0F};
+  corner_3.x += box->x;
+  corner_3.y += box->y;
+  corner_3.z += box->z;
 
-  corners.push_back(box->transform * SC_SACD_Vec3{box->width / 2.0F,
-                                                  box->height / 2.0F,
-                                                  -box->depth / 2.0F});
-  corners.back().x += box->x;
-  corners.back().y += box->y;
-  corners.back().z += box->z;
+  SC_SACD_Vec3 corner_4 =
+      box->transform *
+      SC_SACD_Vec3{-box->width / 2.0F, -box->height / 2.0F, box->depth / 2.0F};
+  corner_4.x += box->x;
+  corner_4.y += box->y;
+  corner_4.z += box->z;
 
-  corners.push_back(box->transform * SC_SACD_Vec3{-box->width / 2.0F,
-                                                  -box->height / 2.0F,
-                                                  box->depth / 2.0F});
-  corners.back().x += box->x;
-  corners.back().y += box->y;
-  corners.back().z += box->z;
+  SC_SACD_Vec3 corner_5 =
+      box->transform *
+      SC_SACD_Vec3{box->width / 2.0F, -box->height / 2.0F, box->depth / 2.0F};
+  corner_5.x += box->x;
+  corner_5.y += box->y;
+  corner_5.z += box->z;
 
-  corners.push_back(box->transform * SC_SACD_Vec3{box->width / 2.0F,
-                                                  -box->height / 2.0F,
-                                                  box->depth / 2.0F});
-  corners.back().x += box->x;
-  corners.back().y += box->y;
-  corners.back().z += box->z;
+  SC_SACD_Vec3 corner_6 =
+      box->transform *
+      SC_SACD_Vec3{-box->width / 2.0F, box->height / 2.0F, box->depth / 2.0F};
+  corner_6.x += box->x;
+  corner_6.y += box->y;
+  corner_6.z += box->z;
 
-  corners.push_back(box->transform * SC_SACD_Vec3{-box->width / 2.0F,
-                                                  box->height / 2.0F,
-                                                  box->depth / 2.0F});
-  corners.back().x += box->x;
-  corners.back().y += box->y;
-  corners.back().z += box->z;
+  SC_SACD_Vec3 corner_7 =
+      box->transform *
+      SC_SACD_Vec3{box->width / 2.0F, box->height / 2.0F, box->depth / 2.0F};
+  corner_7.x += box->x;
+  corner_7.y += box->y;
+  corner_7.z += box->z;
 
-  corners.push_back(box->transform * SC_SACD_Vec3{box->width / 2.0F,
-                                                  box->height / 2.0F,
-                                                  box->depth / 2.0F});
-  corners.back().x += box->x;
-  corners.back().y += box->y;
-  corners.back().z += box->z;
-
-  return corners;
+  return {
+      corner_0, corner_1, corner_2, corner_3,
+      corner_4, corner_5, corner_6, corner_7,
+  };
 }
 
 struct SC_SACD_MinMax {
@@ -217,7 +218,7 @@ std::vector<SC_SACD_MinMax> SC_SACD_Get_Box_MinMax(
     const SC_SACD_Generic_Box *box, const std::span<SC_SACD_Vec3> normals) {
   std::vector<SC_SACD_MinMax> minmaxes;
 
-  std::vector<SC_SACD_Vec3> corners = SC_SACD_Get_Box_Corners(box);
+  auto corners = SC_SACD_Get_Box_Corners(box);
 
   // Assuming normals are not normalized, and will not normalize anyway.
   // MinMax count should be same as normals count.
@@ -570,4 +571,111 @@ SC_SACD_Vec3 SC_SACD_Closest_Point(const SC_SACD_Vec3 *pos,
 
 float SC_SACD_Vec3_Length(const SC_SACD_Vec3 vec) {
   return std::sqrt(SC_SACD_Dot_Product(vec, vec));
+}
+
+SC_SACD_AABB_Box SC_SACD_Sphere_To_AABB(const SC_SACD_Sphere s) {
+  SC_SACD_AABB_Box aabb{};
+
+  aabb.x = s.x;
+  aabb.y = s.y;
+  aabb.z = s.z;
+
+  aabb.width = s.radius * 2.0F;
+  aabb.height = s.radius * 2.0F;
+  aabb.depth = s.radius * 2.0F;
+
+  return aabb;
+}
+
+SC_SACD_AABB_Box SC_SACD_Generic_Box_To_AABB(const SC_SACD_Generic_Box s) {
+  SC_SACD_AABB_Box aabb{};
+
+  auto corners = SC_SACD_Get_Box_Corners(&s);
+
+  SC_SACD_Vec3 min{INFINITY, INFINITY, INFINITY};
+  SC_SACD_Vec3 max{-INFINITY, -INFINITY, -INFINITY};
+
+  for (const auto &corner : corners) {
+    if (corner.x < min.x) {
+      min.x = corner.x;
+    }
+    if (corner.y < min.y) {
+      min.y = corner.y;
+    }
+    if (corner.z < min.z) {
+      min.z = corner.z;
+    }
+
+    if (corner.x > max.x) {
+      max.x = corner.x;
+    }
+    if (corner.y > max.y) {
+      max.y = corner.y;
+    }
+    if (corner.z > max.z) {
+      max.z = corner.z;
+    }
+  }
+
+  aabb.width = max.x - min.x;
+  aabb.height = max.y - min.y;
+  aabb.depth = max.z - min.z;
+
+  aabb.x = min.x + aabb.width / 2.0F;
+  aabb.y = min.y + aabb.height / 2.0F;
+  aabb.z = min.z + aabb.depth / 2.0F;
+
+  return aabb;
+}
+
+SC_SACD_AABB_Box SC_SACD_AABB_Combine(const SC_SACD_AABB_Box a,
+                                      const SC_SACD_AABB_Box b) {
+  SC_SACD_Vec3 min, max;
+
+  // Populate min values.
+
+  float temp_a = a.x - a.width / 2.0F;
+  float temp_b = b.x - b.width / 2.0F;
+
+  min.x = temp_a < temp_b ? temp_a : temp_b;
+
+  temp_a = a.y - a.height / 2.0F;
+  temp_b = b.y - b.height / 2.0F;
+
+  min.y = temp_a < temp_b ? temp_a : temp_b;
+
+  temp_a = a.z - a.depth / 2.0F;
+  temp_b = b.z - b.depth / 2.0F;
+
+  min.z = temp_a < temp_b ? temp_a : temp_b;
+
+  // Populate max values.
+
+  temp_a = a.x + a.width / 2.0F;
+  temp_b = b.x + b.width / 2.0F;
+
+  max.x = temp_a > temp_b ? temp_a : temp_b;
+
+  temp_a = a.y + a.height / 2.0F;
+  temp_b = b.y + b.height / 2.0F;
+
+  max.y = temp_a > temp_b ? temp_a : temp_b;
+
+  temp_a = a.z + a.depth / 2.0F;
+  temp_b = b.z + b.depth / 2.0F;
+
+  max.z = temp_a > temp_b ? temp_a : temp_b;
+
+  // Populate the result.
+
+  temp_a = max.x - min.x;
+  temp_b = max.y - min.y;
+  float temp_c = max.z - min.z;
+
+  return SC_SACD_AABB_Box{min.x + temp_a / 2.0F,
+                          min.y + temp_b / 2.0F,
+                          min.z + temp_c / 2.0F,
+                          temp_a,
+                          temp_b,
+                          temp_c};
 }
