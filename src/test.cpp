@@ -688,12 +688,70 @@ int main() {
     SC_SACD_AABB_Box b{-3.0F, -3.0F, -3.0F, 2.0F, 2.0F, 2.0F};
 
     auto combined = SC_SACD_AABB_Combine(a, b);
-    CHECK_FLOAT(combined.x, (7.0F - 5.0F) / 2.0F);
-    CHECK_FLOAT(combined.y, (7.0F - 5.0F) / 2.0F);
-    CHECK_FLOAT(combined.z, (7.0F - 5.0F) / 2.0F);
-    CHECK_FLOAT(combined.width, 10.0F);
-    CHECK_FLOAT(combined.height, 10.0F);
-    CHECK_FLOAT(combined.depth, 10.0F);
+
+    auto *box_min = a.x - a.width / 2.0F < b.x - b.width / 2.0F ? &a : &b;
+    auto *box_max = a.x + a.width / 2.0F > b.x + b.width / 2.0F ? &a : &b;
+    CHECK_FLOAT(combined.width, box_max->x + box_max->width / 2.0F -
+                                    (box_min->x - box_min->width / 2.0F));
+    CHECK_FLOAT(combined.x, box_min->x - box_min->width / 2.0F +
+                                (box_max->x + box_max->width / 2.0F -
+                                 (box_min->x - box_min->width / 2.0F)) /
+                                    2.0F);
+    box_min = a.y - a.height / 2.0F < b.y - b.height / 2.0F ? &a : &b;
+    box_max = a.y + a.height / 2.0F > b.y + b.height / 2.0F ? &a : &b;
+    CHECK_FLOAT(combined.height, box_max->y + box_max->height / 2.0F -
+                                     (box_min->y - box_min->height / 2.0F));
+    CHECK_FLOAT(combined.y, box_min->y - box_min->height / 2.0F +
+                                (box_max->y + box_max->height / 2.0F -
+                                 (box_min->y - box_min->height / 2.0F)) /
+                                    2.0F);
+    box_min = a.z - a.depth / 2.0F < b.z - b.depth / 2.0F ? &a : &b;
+    box_max = a.z + a.depth / 2.0F > b.z + b.depth / 2.0F ? &a : &b;
+    CHECK_FLOAT(combined.depth, box_max->z + box_max->depth / 2.0F -
+                                    (box_min->z - box_min->depth / 2.0F));
+    CHECK_FLOAT(combined.z, box_min->z - box_min->depth / 2.0F +
+                                (box_max->z + box_max->depth / 2.0F -
+                                 (box_min->z - box_min->depth / 2.0F)) /
+                                    2.0F);
+
+    a.x = -12.0F;
+    a.z = -1.0F;
+    a.width = 1.0F;
+    a.height = 5.0F;
+    a.depth = 0.5F;
+
+    b.x = 1.0F;
+    b.y = 7.0F;
+    b.width = 3.0F;
+    b.height = 4.0F;
+    b.depth = 0.7F;
+
+    combined = SC_SACD_AABB_Combine(a, b);
+
+    box_min = a.x - a.width / 2.0F < b.x - b.width / 2.0F ? &a : &b;
+    box_max = a.x + a.width / 2.0F > b.x + b.width / 2.0F ? &a : &b;
+    CHECK_FLOAT(combined.width, box_max->x + box_max->width / 2.0F -
+                                    (box_min->x - box_min->width / 2.0F));
+    CHECK_FLOAT(combined.x, box_min->x - box_min->width / 2.0F +
+                                (box_max->x + box_max->width / 2.0F -
+                                 (box_min->x - box_min->width / 2.0F)) /
+                                    2.0F);
+    box_min = a.y - a.height / 2.0F < b.y - b.height / 2.0F ? &a : &b;
+    box_max = a.y + a.height / 2.0F > b.y + b.height / 2.0F ? &a : &b;
+    CHECK_FLOAT(combined.height, box_max->y + box_max->height / 2.0F -
+                                     (box_min->y - box_min->height / 2.0F));
+    CHECK_FLOAT(combined.y, box_min->y - box_min->height / 2.0F +
+                                (box_max->y + box_max->height / 2.0F -
+                                 (box_min->y - box_min->height / 2.0F)) /
+                                    2.0F);
+    box_min = a.z - a.depth / 2.0F < b.z - b.depth / 2.0F ? &a : &b;
+    box_max = a.z + a.depth / 2.0F > b.z + b.depth / 2.0F ? &a : &b;
+    CHECK_FLOAT(combined.depth, box_max->z + box_max->depth / 2.0F -
+                                    (box_min->z - box_min->depth / 2.0F));
+    CHECK_FLOAT(combined.z, box_min->z - box_min->depth / 2.0F +
+                                (box_max->z + box_max->depth / 2.0F -
+                                 (box_min->z - box_min->depth / 2.0F)) /
+                                    2.0F);
   }
 
   std::cout << "Checks checked: " << checks_checked << '\n'
