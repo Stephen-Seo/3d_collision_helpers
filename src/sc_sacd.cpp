@@ -546,6 +546,11 @@ SC_SACD_Mat4 SC_SACD_Translate_Mat4(float x, float y, float z) {
                       0.0F, 0.0F, 1.0F, z, 0.0F, 0.0F, 0.0F, 1.0F};
 }
 
+SC_SACD_Mat4 SC_SACD_Scale_Mat4(float x, float y, float z) {
+  return SC_SACD_Mat4{x,    0.0F, 0.0F, 0.0F, 0.0F, y,    0.0F, 0.0F,
+                      0.0F, 0.0F, z,    0.0F, 0.0F, 0.0F, 0.0F, 1.0F};
+}
+
 SC_SACD_Vec3 SC_SACD_Closest_Point_Dir_Normalized(const SC_SACD_Vec3 *pos,
                                                   const SC_SACD_Vec3 *dir,
                                                   const SC_SACD_Vec3 *point) {
