@@ -146,67 +146,68 @@ std::array<SC_SACD_Vec3, 3> SC_SACD_Get_Box_Normals_Normalized(
   return normals;
 }
 
-std::vector<SC_SACD_Vec3> SC_SACD_Get_Box_Corners(
+std::array<SC_SACD_Vec3, 8> SC_SACD_Get_Box_Corners(
     const SC_SACD_Generic_Box *box) {
-  std::vector<SC_SACD_Vec3> corners;
+  SC_SACD_Vec3 corner_0 =
+      box->transform *
+      SC_SACD_Vec3{-box->width / 2.0F, -box->height / 2.0F, -box->depth / 2.0F};
+  corner_0.x += box->x;
+  corner_0.y += box->y;
+  corner_0.z += box->z;
 
-  corners.push_back(box->transform * SC_SACD_Vec3{-box->width / 2.0F,
-                                                  -box->height / 2.0F,
-                                                  -box->depth / 2.0F});
-  corners.back().x += box->x;
-  corners.back().y += box->y;
-  corners.back().z += box->z;
+  SC_SACD_Vec3 corner_1 =
+      box->transform *
+      SC_SACD_Vec3{box->width / 2.0F, -box->height / 2.0F, -box->depth / 2.0F};
+  corner_1.x += box->x;
+  corner_1.y += box->y;
+  corner_1.z += box->z;
 
-  corners.push_back(box->transform * SC_SACD_Vec3{box->width / 2.0F,
-                                                  -box->height / 2.0F,
-                                                  -box->depth / 2.0F});
-  corners.back().x += box->x;
-  corners.back().y += box->y;
-  corners.back().z += box->z;
+  SC_SACD_Vec3 corner_2 =
+      box->transform *
+      SC_SACD_Vec3{-box->width / 2.0F, box->height / 2.0F, -box->depth / 2.0F};
+  corner_2.x += box->x;
+  corner_2.y += box->y;
+  corner_2.z += box->z;
 
-  corners.push_back(box->transform * SC_SACD_Vec3{-box->width / 2.0F,
-                                                  box->height / 2.0F,
-                                                  -box->depth / 2.0F});
-  corners.back().x += box->x;
-  corners.back().y += box->y;
-  corners.back().z += box->z;
+  SC_SACD_Vec3 corner_3 =
+      box->transform *
+      SC_SACD_Vec3{box->width / 2.0F, box->height / 2.0F, -box->depth / 2.0F};
+  corner_3.x += box->x;
+  corner_3.y += box->y;
+  corner_3.z += box->z;
 
-  corners.push_back(box->transform * SC_SACD_Vec3{box->width / 2.0F,
-                                                  box->height / 2.0F,
-                                                  -box->depth / 2.0F});
-  corners.back().x += box->x;
-  corners.back().y += box->y;
-  corners.back().z += box->z;
+  SC_SACD_Vec3 corner_4 =
+      box->transform *
+      SC_SACD_Vec3{-box->width / 2.0F, -box->height / 2.0F, box->depth / 2.0F};
+  corner_4.x += box->x;
+  corner_4.y += box->y;
+  corner_4.z += box->z;
 
-  corners.push_back(box->transform * SC_SACD_Vec3{-box->width / 2.0F,
-                                                  -box->height / 2.0F,
-                                                  box->depth / 2.0F});
-  corners.back().x += box->x;
-  corners.back().y += box->y;
-  corners.back().z += box->z;
+  SC_SACD_Vec3 corner_5 =
+      box->transform *
+      SC_SACD_Vec3{box->width / 2.0F, -box->height / 2.0F, box->depth / 2.0F};
+  corner_5.x += box->x;
+  corner_5.y += box->y;
+  corner_5.z += box->z;
 
-  corners.push_back(box->transform * SC_SACD_Vec3{box->width / 2.0F,
-                                                  -box->height / 2.0F,
-                                                  box->depth / 2.0F});
-  corners.back().x += box->x;
-  corners.back().y += box->y;
-  corners.back().z += box->z;
+  SC_SACD_Vec3 corner_6 =
+      box->transform *
+      SC_SACD_Vec3{-box->width / 2.0F, box->height / 2.0F, box->depth / 2.0F};
+  corner_6.x += box->x;
+  corner_6.y += box->y;
+  corner_6.z += box->z;
 
-  corners.push_back(box->transform * SC_SACD_Vec3{-box->width / 2.0F,
-                                                  box->height / 2.0F,
-                                                  box->depth / 2.0F});
-  corners.back().x += box->x;
-  corners.back().y += box->y;
-  corners.back().z += box->z;
+  SC_SACD_Vec3 corner_7 =
+      box->transform *
+      SC_SACD_Vec3{box->width / 2.0F, box->height / 2.0F, box->depth / 2.0F};
+  corner_7.x += box->x;
+  corner_7.y += box->y;
+  corner_7.z += box->z;
 
-  corners.push_back(box->transform * SC_SACD_Vec3{box->width / 2.0F,
-                                                  box->height / 2.0F,
-                                                  box->depth / 2.0F});
-  corners.back().x += box->x;
-  corners.back().y += box->y;
-  corners.back().z += box->z;
-
-  return corners;
+  return {
+      corner_0, corner_1, corner_2, corner_3,
+      corner_4, corner_5, corner_6, corner_7,
+  };
 }
 
 struct SC_SACD_MinMax {
@@ -217,7 +218,7 @@ std::vector<SC_SACD_MinMax> SC_SACD_Get_Box_MinMax(
     const SC_SACD_Generic_Box *box, const std::span<SC_SACD_Vec3> normals) {
   std::vector<SC_SACD_MinMax> minmaxes;
 
-  std::vector<SC_SACD_Vec3> corners = SC_SACD_Get_Box_Corners(box);
+  auto corners = SC_SACD_Get_Box_Corners(box);
 
   // Assuming normals are not normalized, and will not normalize anyway.
   // MinMax count should be same as normals count.
