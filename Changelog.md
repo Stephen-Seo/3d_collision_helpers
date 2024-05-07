@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 3.0.0
+
+### Breaking Changes
+
+Change pointer-parameters in API to non-pointer parameters.
+
 ## Version 2.2.1
 
 Fix UnitTest for checking AABB.

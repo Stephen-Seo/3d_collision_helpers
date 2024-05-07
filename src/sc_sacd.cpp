@@ -62,8 +62,7 @@ SC_SACD_Vec3 operator*(const SC_SACD_Mat4 &mat, const SC_SACD_Vec3 &vec) {
       vec.x * mat.z0 + vec.y * mat.z1 + vec.z * mat.z2 + mat.z3};
 }
 
-std::array<SC_SACD_Vec3, 3> SC_SACD_Get_Box_Normals(
-    const SC_SACD_Generic_Box *box) {
+std::array<SC_SACD_Vec3, 3> SC_SACD_Get_Box_Normals(SC_SACD_Generic_Box box) {
   SC_SACD_Vec3 a, b, c;
 
   // Facing positive x-axis.
@@ -79,9 +78,9 @@ std::array<SC_SACD_Vec3, 3> SC_SACD_Get_Box_Normals(
   c.y = 0.0F;
   c.z = 1.0F;
 
-  a = box->transform * a;
-  b = box->transform * b;
-  c = box->transform * c;
+  a = box.transform * a;
+  b = box.transform * b;
+  c = box.transform * c;
 
   b = b - a;
   c = c - a;
@@ -101,9 +100,9 @@ std::array<SC_SACD_Vec3, 3> SC_SACD_Get_Box_Normals(
   c.y = 0.0F;
   c.z = -1.0F;
 
-  a = box->transform * a;
-  b = box->transform * b;
-  c = box->transform * c;
+  a = box.transform * a;
+  b = box.transform * b;
+  c = box.transform * c;
 
   b = b - a;
   c = c - a;
@@ -123,9 +122,9 @@ std::array<SC_SACD_Vec3, 3> SC_SACD_Get_Box_Normals(
   c.y = 0.0F;
   c.z = 0.0F;
 
-  a = box->transform * a;
-  b = box->transform * b;
-  c = box->transform * c;
+  a = box.transform * a;
+  b = box.transform * b;
+  c = box.transform * c;
 
   b = b - a;
   c = c - a;
@@ -136,7 +135,7 @@ std::array<SC_SACD_Vec3, 3> SC_SACD_Get_Box_Normals(
 }
 
 std::array<SC_SACD_Vec3, 3> SC_SACD_Get_Box_Normals_Normalized(
-    const SC_SACD_Generic_Box *box) {
+    SC_SACD_Generic_Box box) {
   auto normals = SC_SACD_Get_Box_Normals(box);
 
   for (auto &normal : normals) {
@@ -146,63 +145,62 @@ std::array<SC_SACD_Vec3, 3> SC_SACD_Get_Box_Normals_Normalized(
   return normals;
 }
 
-std::array<SC_SACD_Vec3, 8> SC_SACD_Get_Box_Corners(
-    const SC_SACD_Generic_Box *box) {
+std::array<SC_SACD_Vec3, 8> SC_SACD_Get_Box_Corners(SC_SACD_Generic_Box box) {
   SC_SACD_Vec3 corner_0 =
-      box->transform *
-      SC_SACD_Vec3{-box->width / 2.0F, -box->height / 2.0F, -box->depth / 2.0F};
-  corner_0.x += box->x;
-  corner_0.y += box->y;
-  corner_0.z += box->z;
+      box.transform *
+      SC_SACD_Vec3{-box.width / 2.0F, -box.height / 2.0F, -box.depth / 2.0F};
+  corner_0.x += box.x;
+  corner_0.y += box.y;
+  corner_0.z += box.z;
 
   SC_SACD_Vec3 corner_1 =
-      box->transform *
-      SC_SACD_Vec3{box->width / 2.0F, -box->height / 2.0F, -box->depth / 2.0F};
-  corner_1.x += box->x;
-  corner_1.y += box->y;
-  corner_1.z += box->z;
+      box.transform *
+      SC_SACD_Vec3{box.width / 2.0F, -box.height / 2.0F, -box.depth / 2.0F};
+  corner_1.x += box.x;
+  corner_1.y += box.y;
+  corner_1.z += box.z;
 
   SC_SACD_Vec3 corner_2 =
-      box->transform *
-      SC_SACD_Vec3{-box->width / 2.0F, box->height / 2.0F, -box->depth / 2.0F};
-  corner_2.x += box->x;
-  corner_2.y += box->y;
-  corner_2.z += box->z;
+      box.transform *
+      SC_SACD_Vec3{-box.width / 2.0F, box.height / 2.0F, -box.depth / 2.0F};
+  corner_2.x += box.x;
+  corner_2.y += box.y;
+  corner_2.z += box.z;
 
   SC_SACD_Vec3 corner_3 =
-      box->transform *
-      SC_SACD_Vec3{box->width / 2.0F, box->height / 2.0F, -box->depth / 2.0F};
-  corner_3.x += box->x;
-  corner_3.y += box->y;
-  corner_3.z += box->z;
+      box.transform *
+      SC_SACD_Vec3{box.width / 2.0F, box.height / 2.0F, -box.depth / 2.0F};
+  corner_3.x += box.x;
+  corner_3.y += box.y;
+  corner_3.z += box.z;
 
   SC_SACD_Vec3 corner_4 =
-      box->transform *
-      SC_SACD_Vec3{-box->width / 2.0F, -box->height / 2.0F, box->depth / 2.0F};
-  corner_4.x += box->x;
-  corner_4.y += box->y;
-  corner_4.z += box->z;
+      box.transform *
+      SC_SACD_Vec3{-box.width / 2.0F, -box.height / 2.0F, box.depth / 2.0F};
+  corner_4.x += box.x;
+  corner_4.y += box.y;
+  corner_4.z += box.z;
 
   SC_SACD_Vec3 corner_5 =
-      box->transform *
-      SC_SACD_Vec3{box->width / 2.0F, -box->height / 2.0F, box->depth / 2.0F};
-  corner_5.x += box->x;
-  corner_5.y += box->y;
-  corner_5.z += box->z;
+      box.transform *
+      SC_SACD_Vec3{box.width / 2.0F, -box.height / 2.0F, box.depth / 2.0F};
+  corner_5.x += box.x;
+  corner_5.y += box.y;
+  corner_5.z += box.z;
 
   SC_SACD_Vec3 corner_6 =
-      box->transform *
-      SC_SACD_Vec3{-box->width / 2.0F, box->height / 2.0F, box->depth / 2.0F};
-  corner_6.x += box->x;
-  corner_6.y += box->y;
-  corner_6.z += box->z;
+      box.transform *
+      SC_SACD_Vec3{-box.width / 2.0F, box.height / 2.0F, box.depth / 2.0F};
+  corner_6.x += box.x;
+  corner_6.y += box.y;
+  corner_6.z += box.z;
 
   SC_SACD_Vec3 corner_7 =
-      box->transform *
-      SC_SACD_Vec3{box->width / 2.0F, box->height / 2.0F, box->depth / 2.0F};
-  corner_7.x += box->x;
-  corner_7.y += box->y;
-  corner_7.z += box->z;
+      box.transform *
+      SC_SACD_Vec3{box.width / 2.0F, box.height / 2.0F, box.depth / 2.0F};
+  corner_7.x += box.x;
+  corner_7.y += box.y;
+  corner_7.z += box.z;
 
   return {
       corner_0, corner_1, corner_2, corner_3,
@@ -215,7 +213,7 @@ struct SC_SACD_MinMax {
 };
 
 std::vector<SC_SACD_MinMax> SC_SACD_Get_Box_MinMax(
-    const SC_SACD_Generic_Box *box, const std::span<SC_SACD_Vec3> normals) {
+    SC_SACD_Generic_Box box, const std::span<SC_SACD_Vec3> normals) {
   std::vector<SC_SACD_MinMax> minmaxes;
 
   auto corners = SC_SACD_Get_Box_Corners(box);
@@ -249,21 +247,20 @@ SC_SACD_Generic_Box SC_SACD_Generic_Box_Default() {
   };
 }
 
-int SC_SACD_AABB_Box_Collision(const SC_SACD_AABB_Box *a,
-                               const SC_SACD_AABB_Box *b) {
-  float ax_min = a->x - a->width / 2.0F;
-  float ax_max = a->x + a->width / 2.0F;
-  float ay_min = a->y - a->height / 2.0F;
-  float ay_max = a->y + a->height / 2.0F;
-  float az_min = a->z - a->depth / 2.0F;
-  float az_max = a->z + a->depth / 2.0F;
+int SC_SACD_AABB_Box_Collision(SC_SACD_AABB_Box a, SC_SACD_AABB_Box b) {
+  float ax_min = a.x - a.width / 2.0F;
+  float ax_max = a.x + a.width / 2.0F;
+  float ay_min = a.y - a.height / 2.0F;
+  float ay_max = a.y + a.height / 2.0F;
+  float az_min = a.z - a.depth / 2.0F;
+  float az_max = a.z + a.depth / 2.0F;
 
-  float bx_min = b->x - b->width / 2.0F;
-  float bx_max = b->x + b->width / 2.0F;
-  float by_min = b->y - b->height / 2.0F;
-  float by_max = b->y + b->height / 2.0F;
-  float bz_min = b->z - b->depth / 2.0F;
-  float bz_max = b->z + b->depth / 2.0F;
+  float bx_min = b.x - b.width / 2.0F;
+  float bx_max = b.x + b.width / 2.0F;
+  float by_min = b.y - b.height / 2.0F;
+  float by_max = b.y + b.height / 2.0F;
+  float bz_min = b.z - b.depth / 2.0F;
+  float bz_max = b.z + b.depth / 2.0F;
 
   return (ax_min < bx_max && ax_max > bx_min && ay_min < by_max &&
           ay_max > by_min && az_min < bz_max && az_max > bz_min)
@@ -271,8 +268,8 @@ int SC_SACD_AABB_Box_Collision(const SC_SACD_AABB_Box *a,
              : 0;
 }
 
-int SC_SACD_Generic_Box_Collision(const SC_SACD_Generic_Box *a,
-                                  const SC_SACD_Generic_Box *b) {
+int SC_SACD_Generic_Box_Collision(SC_SACD_Generic_Box a,
+                                  SC_SACD_Generic_Box b) {
   // Get all normals.
   std::vector<SC_SACD_Vec3> normals;
   {
@@ -299,60 +296,60 @@ int SC_SACD_Generic_Box_Collision(const SC_SACD_Generic_Box *a,
   return 1;
 }
 
-int SC_SACD_AABB_Generic_Box_Collision(const SC_SACD_AABB_Box *a,
-                                       const SC_SACD_Generic_Box *b) {
+int SC_SACD_AABB_Generic_Box_Collision(SC_SACD_AABB_Box a,
+                                       SC_SACD_Generic_Box b) {
   SC_SACD_Generic_Box a_conv;
 
-  a_conv.x = a->x;
-  a_conv.y = a->y;
-  a_conv.z = a->z;
-  a_conv.width = a->width;
-  a_conv.height = a->height;
-  a_conv.depth = a->depth;
+  a_conv.x = a.x;
+  a_conv.y = a.y;
+  a_conv.z = a.z;
+  a_conv.width = a.width;
+  a_conv.height = a.height;
+  a_conv.depth = a.depth;
   a_conv.transform = SC_SACD_Mat4_Identity();
-  return SC_SACD_Generic_Box_Collision(&a_conv, b);
+  return SC_SACD_Generic_Box_Collision(a_conv, b);
 }
 
-int SC_SACD_Sphere_Collision(const SC_SACD_Sphere *a, const SC_SACD_Sphere *b) {
-  SC_SACD_Vec3 vec{a->x - b->x, a->y - b->y, a->z - b->z};
+int SC_SACD_Sphere_Collision(SC_SACD_Sphere a, SC_SACD_Sphere b) {
+  SC_SACD_Vec3 vec{a.x - b.x, a.y - b.y, a.z - b.z};
 
-  return (a->radius + b->radius) > std::sqrt(SC_SACD_Dot_Product(vec, vec)) ? 1
-                                                                            : 0;
+  return (a.radius + b.radius) > std::sqrt(SC_SACD_Dot_Product(vec, vec)) ? 1
+                                                                          : 0;
 }
 
-int SC_SACD_Sphere_AABB_Box_Collision(const SC_SACD_Sphere *sphere,
-                                      const SC_SACD_AABB_Box *box) {
+int SC_SACD_Sphere_AABB_Box_Collision(SC_SACD_Sphere sphere,
+                                      SC_SACD_AABB_Box box) {
   SC_SACD_Vec3 box_min{
-      box->x - box->width / 2.0F,
-      box->y - box->height / 2.0F,
-      box->z - box->depth / 2.0F,
+      box.x - box.width / 2.0F,
+      box.y - box.height / 2.0F,
+      box.z - box.depth / 2.0F,
   };
   SC_SACD_Vec3 box_max{
-      box->x + box->width / 2.0F,
-      box->y + box->height / 2.0F,
-      box->z + box->depth / 2.0F,
+      box.x + box.width / 2.0F,
+      box.y + box.height / 2.0F,
+      box.z + box.depth / 2.0F,
   };
 
-  SC_SACD_Vec3 clamped{std::max(box_min.x, std::min(sphere->x, box_max.x)),
-                       std::max(box_min.y, std::min(sphere->y, box_max.y)),
-                       std::max(box_min.z, std::min(sphere->z, box_max.z))};
+  SC_SACD_Vec3 clamped{std::max(box_min.x, std::min(sphere.x, box_max.x)),
+                       std::max(box_min.y, std::min(sphere.y, box_max.y)),
+                       std::max(box_min.z, std::min(sphere.z, box_max.z))};
 
-  SC_SACD_Vec3 diff = clamped - SC_SACD_Vec3{sphere->x, sphere->y, sphere->z};
+  SC_SACD_Vec3 diff = clamped - SC_SACD_Vec3{sphere.x, sphere.y, sphere.z};
 
   float dist = std::sqrt(SC_SACD_Dot_Product(diff, diff));
 
-  return dist < sphere->radius;
+  return dist < sphere.radius;
 }
 
-int SC_SACD_Sphere_Box_Collision(const SC_SACD_Sphere *sphere,
-                                 const SC_SACD_Generic_Box *box) {
+int SC_SACD_Sphere_Box_Collision(SC_SACD_Sphere sphere,
+                                 SC_SACD_Generic_Box box) {
   // Adapted from Generic_Box/Generic_Box collision.
 
   // First check plane where normal = box_pos - sphere_pos.
 
-  SC_SACD_Vec3 sphere_pos{sphere->x, sphere->y, sphere->z};
+  SC_SACD_Vec3 sphere_pos{sphere.x, sphere.y, sphere.z};
   std::array<SC_SACD_Vec3, 1> sphere_box_normal = {
-      SC_SACD_Vec3{box->x, box->y, box->z} - sphere_pos};
+      SC_SACD_Vec3{box.x, box.y, box.z} - sphere_pos};
   if (sphere_box_normal[0].x < 0.0001F && sphere_box_normal[0].x > -0.0001F &&
       sphere_box_normal[0].y < 0.0001F && sphere_box_normal[0].y > -0.0001F &&
       sphere_box_normal[0].z < 0.0001F && sphere_box_normal[0].z > -0.0001F) {
@@ -367,9 +364,9 @@ int SC_SACD_Sphere_Box_Collision(const SC_SACD_Sphere *sphere,
       SC_SACD_Get_Box_MinMax(box, sphere_box_normal);
 
   float projected_0 = SC_SACD_Dot_Product(
-      sphere_box_normal[0], sphere_pos + sphere_box_normal[0] * sphere->radius);
+      sphere_box_normal[0], sphere_pos + sphere_box_normal[0] * sphere.radius);
   float projected_1 = SC_SACD_Dot_Product(
-      sphere_box_normal[0], sphere_pos - sphere_box_normal[0] * sphere->radius);
+      sphere_box_normal[0], sphere_pos - sphere_box_normal[0] * sphere.radius);
   if (projected_0 < projected_1) {
     if (box_minmaxes[0].max < projected_0 ||
         box_minmaxes[0].min > projected_1) {
@@ -386,9 +383,9 @@ int SC_SACD_Sphere_Box_Collision(const SC_SACD_Sphere *sphere,
   box_minmaxes = SC_SACD_Get_Box_MinMax(box, box_normals);
   for (unsigned int i = 0; i < box_normals.size(); ++i) {
     projected_0 = SC_SACD_Dot_Product(
-        box_normals[i], sphere_pos + box_normals[i] * sphere->radius);
+        box_normals[i], sphere_pos + box_normals[i] * sphere.radius);
     projected_1 = SC_SACD_Dot_Product(
-        box_normals[i], sphere_pos - box_normals[i] * sphere->radius);
+        box_normals[i], sphere_pos - box_normals[i] * sphere.radius);
     if (projected_0 < projected_1) {
       if (box_minmaxes[i].max < projected_0 ||
           box_minmaxes[i].min > projected_1) {
@@ -403,11 +400,11 @@ int SC_SACD_Sphere_Box_Collision(const SC_SACD_Sphere *sphere,
   return 1;
 }
 
-float SC_SACD_Dot_Product(const SC_SACD_Vec3 a, const SC_SACD_Vec3 b) {
+float SC_SACD_Dot_Product(SC_SACD_Vec3 a, SC_SACD_Vec3 b) {
   return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
-SC_SACD_Vec3 SC_SACD_Cross_Product(const SC_SACD_Vec3 a, const SC_SACD_Vec3 b) {
+SC_SACD_Vec3 SC_SACD_Cross_Product(SC_SACD_Vec3 a, SC_SACD_Vec3 b) {
   return SC_SACD_Vec3{a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z,
                       a.x * b.y - a.y * b.x};
 }
@@ -417,17 +414,14 @@ SC_SACD_Mat4 SC_SACD_Mat4_Identity(void) {
                       0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F};
 }
 
-SC_SACD_Mat4 SC_SACD_Mat4_Mult(const SC_SACD_Mat4 *a, const SC_SACD_Mat4 *b) {
-  return (*a) * (*b);
+SC_SACD_Mat4 SC_SACD_Mat4_Mult(SC_SACD_Mat4 a, SC_SACD_Mat4 b) { return a * b; }
+
+SC_SACD_Vec3 SC_SACD_Mat4_Vec3_Mult(SC_SACD_Mat4 mat, SC_SACD_Vec3 vec) {
+  return mat * vec;
 }
 
-SC_SACD_Vec3 SC_SACD_Mat4_Vec3_Mult(const SC_SACD_Mat4 *mat,
-                                    const SC_SACD_Vec3 vec) {
-  return (*mat) * vec;
-}
-
-SC_SACD_Vec3 SC_SACD_Vec3_Rotate(const SC_SACD_Vec3 vec, float x_axis,
-                                 float y_axis, float z_axis) {
+SC_SACD_Vec3 SC_SACD_Vec3_Rotate(SC_SACD_Vec3 vec, float x_axis, float y_axis,
+                                 float z_axis) {
   /*
    * z_axis counter-clockwise affects x and y.
    * [  cos, -sin, 0 ]
@@ -451,17 +445,17 @@ SC_SACD_Vec3 SC_SACD_Vec3_Rotate(const SC_SACD_Vec3 vec, float x_axis,
   // About x_axis.
   mat = SC_SACD_Rotation_Mat4_XAxis(x_axis);
 
-  result = SC_SACD_Mat4_Vec3_Mult(&mat, vec);
+  result = SC_SACD_Mat4_Vec3_Mult(mat, vec);
 
   // About y_axis.
   mat = SC_SACD_Rotation_Mat4_YAxis(y_axis);
 
-  result = SC_SACD_Mat4_Vec3_Mult(&mat, result);
+  result = SC_SACD_Mat4_Vec3_Mult(mat, result);
 
   // About z_axis.
   mat = SC_SACD_Rotation_Mat4_ZAxis(z_axis);
 
-  return SC_SACD_Mat4_Vec3_Mult(&mat, result);
+  return SC_SACD_Mat4_Vec3_Mult(mat, result);
 }
 
 SC_SACD_Mat4 SC_SACD_Rotation_Mat4_XAxis(float x_radians) {
@@ -552,28 +546,26 @@ SC_SACD_Mat4 SC_SACD_Scale_Mat4(float x, float y, float z) {
                       0.0F, 0.0F, z,    0.0F, 0.0F, 0.0F, 0.0F, 1.0F};
 }
 
-SC_SACD_Vec3 SC_SACD_Closest_Point_Dir_Normalized(const SC_SACD_Vec3 *pos,
-                                                  const SC_SACD_Vec3 *dir,
-                                                  const SC_SACD_Vec3 *point) {
-  float alpha =
-      SC_SACD_Dot_Product(*dir, *point) - SC_SACD_Dot_Product(*dir, *pos);
-  return *pos + *dir * alpha;
+SC_SACD_Vec3 SC_SACD_Closest_Point_Dir_Normalized(SC_SACD_Vec3 pos,
+                                                  SC_SACD_Vec3 dir,
+                                                  SC_SACD_Vec3 point) {
+  float alpha = SC_SACD_Dot_Product(dir, point) - SC_SACD_Dot_Product(dir, pos);
+  return pos + dir * alpha;
 }
 
-SC_SACD_Vec3 SC_SACD_Closest_Point(const SC_SACD_Vec3 *pos,
-                                   const SC_SACD_Vec3 *dir,
-                                   const SC_SACD_Vec3 *point) {
+SC_SACD_Vec3 SC_SACD_Closest_Point(SC_SACD_Vec3 pos, SC_SACD_Vec3 dir,
+                                   SC_SACD_Vec3 point) {
   float alpha =
-      (SC_SACD_Dot_Product(*dir, *point) - SC_SACD_Dot_Product(*dir, *pos)) /
-      SC_SACD_Dot_Product(*dir, *dir);
-  return *pos + *dir * alpha;
+      (SC_SACD_Dot_Product(dir, point) - SC_SACD_Dot_Product(dir, pos)) /
+      SC_SACD_Dot_Product(dir, dir);
+  return pos + dir * alpha;
 }
 
-float SC_SACD_Vec3_Length(const SC_SACD_Vec3 vec) {
+float SC_SACD_Vec3_Length(SC_SACD_Vec3 vec) {
   return std::sqrt(SC_SACD_Dot_Product(vec, vec));
 }
 
-SC_SACD_AABB_Box SC_SACD_Sphere_To_AABB(const SC_SACD_Sphere s) {
+SC_SACD_AABB_Box SC_SACD_Sphere_To_AABB(SC_SACD_Sphere s) {
   SC_SACD_AABB_Box aabb{};
 
   aabb.x = s.x;
@@ -587,10 +579,10 @@ SC_SACD_AABB_Box SC_SACD_Sphere_To_AABB(const SC_SACD_Sphere s) {
   return aabb;
 }
 
-SC_SACD_AABB_Box SC_SACD_Generic_Box_To_AABB(const SC_SACD_Generic_Box s) {
+SC_SACD_AABB_Box SC_SACD_Generic_Box_To_AABB(SC_SACD_Generic_Box s) {
   SC_SACD_AABB_Box aabb{};
 
-  auto corners = SC_SACD_Get_Box_Corners(&s);
+  auto corners = SC_SACD_Get_Box_Corners(s);
 
   SC_SACD_Vec3 min{INFINITY, INFINITY, INFINITY};
   SC_SACD_Vec3 max{-INFINITY, -INFINITY, -INFINITY};
@@ -628,8 +620,7 @@ SC_SACD_AABB_Box SC_SACD_Generic_Box_To_AABB(const SC_SACD_Generic_Box s) {
   return aabb;
 }
 
-SC_SACD_AABB_Box SC_SACD_AABB_Combine(const SC_SACD_AABB_Box a,
-                                      const SC_SACD_AABB_Box b) {
+SC_SACD_AABB_Box SC_SACD_AABB_Combine(SC_SACD_AABB_Box a, SC_SACD_AABB_Box b) {
   SC_SACD_Vec3 min, max;
 
   // Populate min values.
