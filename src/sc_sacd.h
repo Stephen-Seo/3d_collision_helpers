@@ -71,47 +71,43 @@ typedef struct SC_SACD_EXPORT SC_SACD_Sphere {
 SC_SACD_EXPORT SC_SACD_Generic_Box SC_SACD_Generic_Box_Default(void);
 
 /// Returns non-zero if there is collision.
-SC_SACD_EXPORT int SC_SACD_AABB_Box_Collision(const SC_SACD_AABB_Box *a,
-                                              const SC_SACD_AABB_Box *b);
+SC_SACD_EXPORT int SC_SACD_AABB_Box_Collision(SC_SACD_AABB_Box a,
+                                              SC_SACD_AABB_Box b);
 
 /// Returns non-zero if there is collision.
-SC_SACD_EXPORT int SC_SACD_Generic_Box_Collision(const SC_SACD_Generic_Box *a,
-                                                 const SC_SACD_Generic_Box *b);
+SC_SACD_EXPORT int SC_SACD_Generic_Box_Collision(SC_SACD_Generic_Box a,
+                                                 SC_SACD_Generic_Box b);
 
 /// Returns non-zero if there is collision.
-SC_SACD_EXPORT int SC_SACD_AABB_Generic_Box_Collision(
-    const SC_SACD_AABB_Box *a, const SC_SACD_Generic_Box *b);
+SC_SACD_EXPORT int SC_SACD_AABB_Generic_Box_Collision(SC_SACD_AABB_Box a,
+                                                      SC_SACD_Generic_Box b);
 
 /// Returns non-zero if there is collision.
-SC_SACD_EXPORT int SC_SACD_Sphere_Collision(const SC_SACD_Sphere *a,
-                                            const SC_SACD_Sphere *b);
+SC_SACD_EXPORT int SC_SACD_Sphere_Collision(SC_SACD_Sphere a, SC_SACD_Sphere b);
 
 /// Returns non-zero if there is collision.
-SC_SACD_EXPORT int SC_SACD_Sphere_AABB_Box_Collision(
-    const SC_SACD_Sphere *sphere, const SC_SACD_AABB_Box *box);
+SC_SACD_EXPORT int SC_SACD_Sphere_AABB_Box_Collision(SC_SACD_Sphere sphere,
+                                                     SC_SACD_AABB_Box box);
 
 /// Returns non-zero if there is collision.
-SC_SACD_EXPORT int SC_SACD_Sphere_Box_Collision(const SC_SACD_Sphere *sphere,
-                                                const SC_SACD_Generic_Box *box);
+SC_SACD_EXPORT int SC_SACD_Sphere_Box_Collision(SC_SACD_Sphere sphere,
+                                                SC_SACD_Generic_Box box);
 
-SC_SACD_EXPORT float SC_SACD_Dot_Product(const SC_SACD_Vec3 a,
-                                         const SC_SACD_Vec3 b);
+SC_SACD_EXPORT float SC_SACD_Dot_Product(SC_SACD_Vec3 a, SC_SACD_Vec3 b);
 
-SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Cross_Product(const SC_SACD_Vec3 a,
-                                                  const SC_SACD_Vec3 b);
+SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Cross_Product(SC_SACD_Vec3 a,
+                                                  SC_SACD_Vec3 b);
 
 SC_SACD_EXPORT SC_SACD_Mat4 SC_SACD_Mat4_Identity(void);
 
-SC_SACD_EXPORT SC_SACD_Mat4 SC_SACD_Mat4_Mult(const SC_SACD_Mat4 *a,
-                                              const SC_SACD_Mat4 *b);
+SC_SACD_EXPORT SC_SACD_Mat4 SC_SACD_Mat4_Mult(SC_SACD_Mat4 a, SC_SACD_Mat4 b);
 
-SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Mat4_Vec3_Mult(const SC_SACD_Mat4 *mat,
-                                                   const SC_SACD_Vec3 vec);
+SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Mat4_Vec3_Mult(SC_SACD_Mat4 mat,
+                                                   SC_SACD_Vec3 vec);
 
 /// Rotates by x-axis first, then y-axis, then finally z-axis.
-SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Vec3_Rotate(const SC_SACD_Vec3 vec,
-                                                float x_axis, float y_axis,
-                                                float z_axis);
+SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Vec3_Rotate(SC_SACD_Vec3 vec, float x_axis,
+                                                float y_axis, float z_axis);
 
 SC_SACD_EXPORT SC_SACD_Mat4 SC_SACD_Rotation_Mat4_XAxis(float x_radians);
 SC_SACD_EXPORT SC_SACD_Mat4 SC_SACD_Rotation_Mat4_YAxis(float y_radians);
@@ -123,23 +119,22 @@ SC_SACD_EXPORT SC_SACD_Mat4 SC_SACD_Scale_Mat4(float x, float y, float z);
 
 /// This variant of Closest_Point expects "dir" to be a unit vector.
 SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Closest_Point_Dir_Normalized(
-    const SC_SACD_Vec3 *pos, const SC_SACD_Vec3 *dir,
-    const SC_SACD_Vec3 *point);
+    SC_SACD_Vec3 pos, SC_SACD_Vec3 dir, SC_SACD_Vec3 point);
 
 /// This variant of Closest_Point expects "dir" to NOT be a unit vector.
-SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Closest_Point(const SC_SACD_Vec3 *pos,
-                                                  const SC_SACD_Vec3 *dir,
-                                                  const SC_SACD_Vec3 *point);
+SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Closest_Point(SC_SACD_Vec3 pos,
+                                                  SC_SACD_Vec3 dir,
+                                                  SC_SACD_Vec3 point);
 
-SC_SACD_EXPORT float SC_SACD_Vec3_Length(const SC_SACD_Vec3 vec);
+SC_SACD_EXPORT float SC_SACD_Vec3_Length(SC_SACD_Vec3 vec);
 
-SC_SACD_EXPORT SC_SACD_AABB_Box SC_SACD_Sphere_To_AABB(const SC_SACD_Sphere s);
+SC_SACD_EXPORT SC_SACD_AABB_Box SC_SACD_Sphere_To_AABB(SC_SACD_Sphere s);
 SC_SACD_EXPORT SC_SACD_AABB_Box
-SC_SACD_Generic_Box_To_AABB(const SC_SACD_Generic_Box s);
+SC_SACD_Generic_Box_To_AABB(SC_SACD_Generic_Box s);
 
 /// Combines AABB's such that the new AABB encompasses the two AABB's.
-SC_SACD_EXPORT SC_SACD_AABB_Box SC_SACD_AABB_Combine(const SC_SACD_AABB_Box a,
-                                                     const SC_SACD_AABB_Box b);
+SC_SACD_EXPORT SC_SACD_AABB_Box SC_SACD_AABB_Combine(SC_SACD_AABB_Box a,
+                                                     SC_SACD_AABB_Box b);
 
 #ifdef __cplusplus
 }

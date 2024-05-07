@@ -44,54 +44,54 @@ int main() {
     SC_SACD_AABB_Box a{0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F};
     SC_SACD_AABB_Box b{2.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F};
 
-    CHECK_FALSE(SC_SACD_AABB_Box_Collision(&a, &b));
+    CHECK_FALSE(SC_SACD_AABB_Box_Collision(a, b));
 
     b.x = -2.0F;
-    CHECK_FALSE(SC_SACD_AABB_Box_Collision(&a, &b));
+    CHECK_FALSE(SC_SACD_AABB_Box_Collision(a, b));
 
     b.x = 0.5F;
-    CHECK_TRUE(SC_SACD_AABB_Box_Collision(&a, &b));
+    CHECK_TRUE(SC_SACD_AABB_Box_Collision(a, b));
     b.x = -0.5F;
-    CHECK_TRUE(SC_SACD_AABB_Box_Collision(&a, &b));
+    CHECK_TRUE(SC_SACD_AABB_Box_Collision(a, b));
 
     b.x = 0.0F;
     b.y = 2.0F;
-    CHECK_FALSE(SC_SACD_AABB_Box_Collision(&a, &b));
+    CHECK_FALSE(SC_SACD_AABB_Box_Collision(a, b));
     b.y = -2.0F;
-    CHECK_FALSE(SC_SACD_AABB_Box_Collision(&a, &b));
+    CHECK_FALSE(SC_SACD_AABB_Box_Collision(a, b));
 
     b.y = 0.5F;
-    CHECK_TRUE(SC_SACD_AABB_Box_Collision(&a, &b));
+    CHECK_TRUE(SC_SACD_AABB_Box_Collision(a, b));
     b.y = -0.5F;
-    CHECK_TRUE(SC_SACD_AABB_Box_Collision(&a, &b));
+    CHECK_TRUE(SC_SACD_AABB_Box_Collision(a, b));
 
     b.y = 0.0F;
     b.z = 2.0F;
-    CHECK_FALSE(SC_SACD_AABB_Box_Collision(&a, &b));
+    CHECK_FALSE(SC_SACD_AABB_Box_Collision(a, b));
 
     b.z = -2.0F;
-    CHECK_FALSE(SC_SACD_AABB_Box_Collision(&a, &b));
+    CHECK_FALSE(SC_SACD_AABB_Box_Collision(a, b));
 
     b.z = 0.5F;
-    CHECK_TRUE(SC_SACD_AABB_Box_Collision(&a, &b));
+    CHECK_TRUE(SC_SACD_AABB_Box_Collision(a, b));
 
     b.z = -0.5F;
-    CHECK_TRUE(SC_SACD_AABB_Box_Collision(&a, &b));
+    CHECK_TRUE(SC_SACD_AABB_Box_Collision(a, b));
 
     b.z = 0.0F;
     b.x = 0.5F;
     b.y = 2.0F;
-    CHECK_FALSE(SC_SACD_AABB_Box_Collision(&a, &b));
+    CHECK_FALSE(SC_SACD_AABB_Box_Collision(a, b));
 
     b.y = -2.0F;
-    CHECK_FALSE(SC_SACD_AABB_Box_Collision(&a, &b));
+    CHECK_FALSE(SC_SACD_AABB_Box_Collision(a, b));
 
     b.x = -0.5F;
     b.y = 2.0F;
-    CHECK_FALSE(SC_SACD_AABB_Box_Collision(&a, &b));
+    CHECK_FALSE(SC_SACD_AABB_Box_Collision(a, b));
 
     b.y = -2.0F;
-    CHECK_FALSE(SC_SACD_AABB_Box_Collision(&a, &b));
+    CHECK_FALSE(SC_SACD_AABB_Box_Collision(a, b));
   }
 
   // Test Separating_Axis_Collision check.
@@ -101,54 +101,54 @@ int main() {
     SC_SACD_Generic_Box b{
         0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F, SC_SACD_Mat4_Identity()};
 
-    CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
+    CHECK_TRUE(SC_SACD_Generic_Box_Collision(a, b));
 
     b.x = 1.1F;
-    CHECK_FALSE(SC_SACD_Generic_Box_Collision(&a, &b));
+    CHECK_FALSE(SC_SACD_Generic_Box_Collision(a, b));
     b.x = -1.1F;
-    CHECK_FALSE(SC_SACD_Generic_Box_Collision(&a, &b));
+    CHECK_FALSE(SC_SACD_Generic_Box_Collision(a, b));
 
     a.transform = SC_SACD_Rotation_Mat4_ZAxis(std::numbers::pi_v<float> / 4.0F);
     b.transform = a.transform;
-    CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
+    CHECK_TRUE(SC_SACD_Generic_Box_Collision(a, b));
     b.x = 1.1F;
-    CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
+    CHECK_TRUE(SC_SACD_Generic_Box_Collision(a, b));
 
     b.x = 0.0F;
     b.y = 1.1F;
     a.transform = SC_SACD_Mat4_Identity();
     b.transform = a.transform;
-    CHECK_FALSE(SC_SACD_Generic_Box_Collision(&a, &b));
+    CHECK_FALSE(SC_SACD_Generic_Box_Collision(a, b));
     b.y = -1.1F;
-    CHECK_FALSE(SC_SACD_Generic_Box_Collision(&a, &b));
+    CHECK_FALSE(SC_SACD_Generic_Box_Collision(a, b));
 
     a.transform = SC_SACD_Rotation_Mat4_ZAxis(std::numbers::pi_v<float> / 4.0F);
     b.transform = a.transform;
-    CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
+    CHECK_TRUE(SC_SACD_Generic_Box_Collision(a, b));
     b.y = 1.1F;
-    CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
+    CHECK_TRUE(SC_SACD_Generic_Box_Collision(a, b));
 
     b.y = 0.0F;
     a.transform = SC_SACD_Mat4_Identity();
     b.transform = a.transform;
 
     b.z = 1.1F;
-    CHECK_FALSE(SC_SACD_Generic_Box_Collision(&a, &b));
+    CHECK_FALSE(SC_SACD_Generic_Box_Collision(a, b));
     b.z = -1.1F;
-    CHECK_FALSE(SC_SACD_Generic_Box_Collision(&a, &b));
+    CHECK_FALSE(SC_SACD_Generic_Box_Collision(a, b));
 
     a.transform = SC_SACD_Rotation_Mat4_YAxis(std::numbers::pi_v<float> / 4.0F);
     b.transform = a.transform;
-    CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
+    CHECK_TRUE(SC_SACD_Generic_Box_Collision(a, b));
     b.z = 1.1F;
-    CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
+    CHECK_TRUE(SC_SACD_Generic_Box_Collision(a, b));
   }
 
   // Test Sphere/Sphere collision check.
   {
     SC_SACD_Sphere a{0.0F, 0.0F, 0.0F, 1.0F};
     SC_SACD_Sphere b{0.0F, 0.0F, 0.0F, 1.0F};
-    CHECK_TRUE(SC_SACD_Sphere_Collision(&a, &b));
+    CHECK_TRUE(SC_SACD_Sphere_Collision(a, b));
 
     a.x = 10.0F;
     a.y = 10.0F;
@@ -156,13 +156,13 @@ int main() {
     b.x = 10.0F;
     b.y = 10.5F;
     b.z = 10.0F;
-    CHECK_TRUE(SC_SACD_Sphere_Collision(&a, &b));
+    CHECK_TRUE(SC_SACD_Sphere_Collision(a, b));
     b.y = 12.0F;
     b.z = 12.0F;
-    CHECK_FALSE(SC_SACD_Sphere_Collision(&a, &b));
+    CHECK_FALSE(SC_SACD_Sphere_Collision(a, b));
     b.y = 11.0F;
     b.z = 11.0F;
-    CHECK_TRUE(SC_SACD_Sphere_Collision(&a, &b));
+    CHECK_TRUE(SC_SACD_Sphere_Collision(a, b));
   }
 
   // Test Sphere/AABB collision check.
@@ -170,69 +170,69 @@ int main() {
     SC_SACD_Sphere sphere{0.0F, 0.0F, 0.0F, 1.0F};
     SC_SACD_AABB_Box box{0.0F, 0.0F, 0.0F, 2.0F, 2.0F, 2.0F};
 
-    CHECK_TRUE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+    CHECK_TRUE(SC_SACD_Sphere_AABB_Box_Collision(sphere, box));
 
     sphere.x = 2.1F;
-    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(sphere, box));
 
     sphere.x = -2.1F;
-    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(sphere, box));
 
     sphere.x = 0.0F;
     sphere.y = 2.1F;
-    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(sphere, box));
 
     sphere.y = -2.1F;
-    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(sphere, box));
 
     sphere.y = 0.0F;
     sphere.z = 2.1F;
-    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(sphere, box));
 
     sphere.z = -2.1F;
-    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(sphere, box));
 
     sphere.z = 0.0F;
     sphere.x = 1.0F;
     sphere.y = 1.0F;
-    CHECK_TRUE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+    CHECK_TRUE(SC_SACD_Sphere_AABB_Box_Collision(sphere, box));
 
     sphere.x = -1.0F;
     sphere.y = -1.0F;
-    CHECK_TRUE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+    CHECK_TRUE(SC_SACD_Sphere_AABB_Box_Collision(sphere, box));
 
     sphere.x = 2.0F;
     sphere.y = 2.0F;
-    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(sphere, box));
 
     sphere.x = -2.0F;
     sphere.y = -2.0F;
-    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(sphere, box));
 
     sphere.x = 1.0F;
     sphere.y = 0.0F;
     sphere.z = 1.0F;
-    CHECK_TRUE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+    CHECK_TRUE(SC_SACD_Sphere_AABB_Box_Collision(sphere, box));
 
     sphere.x = -1.0F;
     sphere.z = -1.0F;
-    CHECK_TRUE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+    CHECK_TRUE(SC_SACD_Sphere_AABB_Box_Collision(sphere, box));
 
     sphere.x = 2.0F;
     sphere.z = 2.0F;
-    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(sphere, box));
 
     sphere.x = -2.0F;
     sphere.z = -2.0F;
-    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(sphere, box));
 
     sphere.x = 1.0F;
     sphere.z = 1.5F;
-    CHECK_TRUE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+    CHECK_TRUE(SC_SACD_Sphere_AABB_Box_Collision(sphere, box));
 
     sphere.x = 1.0F;
     sphere.z = 2.0F;
-    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_AABB_Box_Collision(sphere, box));
   }
 
   // Test Sphere/Generic_Box collision check.
@@ -247,67 +247,67 @@ int main() {
         2.0F,
         SC_SACD_Rotation_Mat4_ZAxis(std::numbers::pi_v<float> / 4.0F)};
 
-    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(sphere, box));
 
     sphere.x = 2.5F;
-    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(sphere, box));
     sphere.x = -2.5F;
-    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(sphere, box));
     sphere.x = 2.3F;
-    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(sphere, box));
     sphere.x = -2.3F;
-    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(sphere, box));
 
     sphere.x = 0.0F;
     sphere.y = 2.5F;
-    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(sphere, box));
     sphere.y = -2.5F;
-    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(sphere, box));
     sphere.y = 2.3F;
-    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(sphere, box));
     sphere.y = -2.3F;
-    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(sphere, box));
 
     sphere.y = 0.0F;
     sphere.z = 2.1F;
-    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(sphere, box));
     sphere.z = -2.1F;
-    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(sphere, box));
     sphere.z = 1.9F;
-    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(sphere, box));
     sphere.z = -1.9F;
-    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(sphere, box));
 
     sphere.x = 1.5F;
     sphere.y = 1.5F;
     sphere.z = 0.0F;
-    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(sphere, box));
     sphere.x = 1.4F;
     sphere.y = 1.4F;
-    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(sphere, box));
 
     sphere.x = 2.2F;
     sphere.y = 0.7929F;
-    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(sphere, box));
 
     sphere.x = 2.1F;
     sphere.y = 0.6929F;
-    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(sphere, box));
 
     sphere.x = -1.5F;
     sphere.y = -1.5F;
-    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(sphere, box));
     sphere.x = -1.4F;
     sphere.y = -1.4F;
-    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(sphere, box));
 
     sphere.x = -2.2F;
     sphere.y = -0.7929F;
-    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(sphere, box));
 
     sphere.x = -2.1F;
     sphere.y = -0.6929F;
-    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(sphere, box));
 
     box.x = 10.0F;
     box.y = -10.0F;
@@ -316,64 +316,64 @@ int main() {
     sphere.y = -10.0F;
     sphere.z = 13.0F;
     sphere.x = 10.0F + 2.5F;
-    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(sphere, box));
     sphere.x = 10.0F + -2.5F;
-    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(sphere, box));
     sphere.x = 10.0F + 2.3F;
-    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(sphere, box));
     sphere.x = 10.0F + -2.3F;
-    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(sphere, box));
 
     sphere.x = 10.0F + 0.0F;
     sphere.y = -10.0F + 2.5F;
-    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(sphere, box));
     sphere.y = -10.0F + -2.5F;
-    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(sphere, box));
     sphere.y = -10.0F + 2.3F;
-    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(sphere, box));
     sphere.y = -10.0F + -2.3F;
-    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(sphere, box));
 
     sphere.y = -10.0F + 0.0F;
     sphere.z = 13.0F + 2.1F;
-    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(sphere, box));
     sphere.z = 13.0F + -2.1F;
-    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(sphere, box));
     sphere.z = 13.0F + 1.9F;
-    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(sphere, box));
     sphere.z = 13.0F + -1.9F;
-    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(sphere, box));
 
     sphere.x = 10.0F + 1.5F;
     sphere.y = -10.0F + 1.5F;
     sphere.z = 13.0F + 0.0F;
-    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(sphere, box));
     sphere.x = 10.0F + 1.4F;
     sphere.y = -10.0F + 1.4F;
-    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(sphere, box));
 
     sphere.x = 10.0F + 2.2F;
     sphere.y = -10.0F + 0.7929F;
-    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(sphere, box));
 
     sphere.x = 10.0F + 2.1F;
     sphere.y = -10.0F + 0.6929F;
-    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(sphere, box));
 
     sphere.x = 10.0F + -1.5F;
     sphere.y = -10.0F + -1.5F;
-    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(sphere, box));
     sphere.x = 10.0F + -1.4F;
     sphere.y = -10.0F + -1.4F;
-    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(sphere, box));
 
     sphere.x = 10.0F + -2.2F;
     sphere.y = -10.0F + -0.7929F;
-    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_FALSE(SC_SACD_Sphere_Box_Collision(sphere, box));
 
     sphere.x = 10.0F + -2.1F;
     sphere.y = -10.0F + -0.6929F;
-    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(&sphere, &box));
+    CHECK_TRUE(SC_SACD_Sphere_Box_Collision(sphere, box));
   }
 
   // Test matrix/vector multiplication.
@@ -384,7 +384,7 @@ int main() {
     SC_SACD_Mat4 mat_b = SC_SACD_Mat4_Identity();
 
     {
-      auto result = SC_SACD_Mat4_Mult(&mat_a, &mat_b);
+      auto result = SC_SACD_Mat4_Mult(mat_a, mat_b);
       CHECK_TRUE(mat_a.x0 == result.x0);
       CHECK_TRUE(mat_a.x1 == result.x1);
       CHECK_TRUE(mat_a.x2 == result.x2);
@@ -407,7 +407,7 @@ int main() {
     mat_b.y1 = 0.0F;
     mat_b.z2 = 0.0F;
     {
-      auto result = SC_SACD_Mat4_Mult(&mat_a, &mat_b);
+      auto result = SC_SACD_Mat4_Mult(mat_a, mat_b);
       CHECK_FLOAT(result.x0, 2.0F);
       CHECK_FLOAT(result.y0, 10.0F);
       CHECK_FLOAT(result.z0, 18.0F);
@@ -429,7 +429,7 @@ int main() {
     mat_b = SC_SACD_Mat4_Identity();
     SC_SACD_Vec3 vec_a{1.0F, 0.0F, 0.0F};
     {
-      auto result = SC_SACD_Mat4_Vec3_Mult(&mat_b, vec_a);
+      auto result = SC_SACD_Mat4_Vec3_Mult(mat_b, vec_a);
       CHECK_TRUE(result.x == vec_a.x);
       CHECK_TRUE(result.y == vec_a.y);
       CHECK_TRUE(result.z == vec_a.z);
@@ -438,7 +438,7 @@ int main() {
     // Rotations about each axis.
     mat_a = SC_SACD_Rotation_Mat4_ZAxis(std::numbers::pi_v<float> / 2.0F);
     {
-      auto result = SC_SACD_Mat4_Vec3_Mult(&mat_a, vec_a);
+      auto result = SC_SACD_Mat4_Vec3_Mult(mat_a, vec_a);
       CHECK_TRUE(result.x < 0.0001F && result.x > -0.0001F);
       CHECK_TRUE(result.y < 1.0001F && result.y > 0.9999F);
       CHECK_TRUE(result.z < 0.0001F && result.z > -0.0001F);
@@ -446,7 +446,7 @@ int main() {
 
     mat_a = SC_SACD_Rotation_Mat4_ZAxis(std::numbers::pi_v<float>);
     {
-      auto result = SC_SACD_Mat4_Vec3_Mult(&mat_a, vec_a);
+      auto result = SC_SACD_Mat4_Vec3_Mult(mat_a, vec_a);
       CHECK_TRUE(result.x < -0.9999F && result.x > -1.0001F);
       CHECK_TRUE(result.y < 0.0001F && result.y > -0.0001F);
       CHECK_TRUE(result.z < 0.0001F && result.z > -0.0001F);
@@ -455,7 +455,7 @@ int main() {
     mat_a =
         SC_SACD_Rotation_Mat4_ZAxis(std::numbers::pi_v<float> * 3.0F / 2.0F);
     {
-      auto result = SC_SACD_Mat4_Vec3_Mult(&mat_a, vec_a);
+      auto result = SC_SACD_Mat4_Vec3_Mult(mat_a, vec_a);
       CHECK_TRUE(result.x < 0.0001F && result.x > -0.0001F);
       CHECK_TRUE(result.y < -0.9999F && result.y > -1.0001F);
       CHECK_TRUE(result.z < 0.0001F && result.z > -0.0001F);
@@ -466,7 +466,7 @@ int main() {
     vec_a.y = 1.0F;
     vec_a.z = 0.0F;
     {
-      auto result = SC_SACD_Mat4_Vec3_Mult(&mat_a, vec_a);
+      auto result = SC_SACD_Mat4_Vec3_Mult(mat_a, vec_a);
       CHECK_TRUE(result.x < 0.0001F && result.x > -0.0001F);
       CHECK_TRUE(result.y < 0.0001F && result.y > -0.0001F);
       CHECK_TRUE(result.z < 1.0001F && result.z > 0.9999F);
@@ -474,7 +474,7 @@ int main() {
 
     mat_a = SC_SACD_Rotation_Mat4_XAxis(std::numbers::pi_v<float>);
     {
-      auto result = SC_SACD_Mat4_Vec3_Mult(&mat_a, vec_a);
+      auto result = SC_SACD_Mat4_Vec3_Mult(mat_a, vec_a);
       CHECK_TRUE(result.x < 0.0001F && result.x > -0.0001F);
       CHECK_TRUE(result.y < -0.9999F && result.y > -1.0001F);
       CHECK_TRUE(result.z < 0.0001F && result.z > -0.0001F);
@@ -483,7 +483,7 @@ int main() {
     mat_a =
         SC_SACD_Rotation_Mat4_XAxis(std::numbers::pi_v<float> * 3.0F / 2.0F);
     {
-      auto result = SC_SACD_Mat4_Vec3_Mult(&mat_a, vec_a);
+      auto result = SC_SACD_Mat4_Vec3_Mult(mat_a, vec_a);
       CHECK_TRUE(result.x < 0.0001F && result.x > -0.0001F);
       CHECK_TRUE(result.y < 0.0001F && result.y > -0.0001F);
       CHECK_TRUE(result.z < -0.9999F && result.z > -1.0001F);
@@ -494,7 +494,7 @@ int main() {
     vec_a.y = 0.0F;
     vec_a.z = 1.0F;
     {
-      auto result = SC_SACD_Mat4_Vec3_Mult(&mat_a, vec_a);
+      auto result = SC_SACD_Mat4_Vec3_Mult(mat_a, vec_a);
       CHECK_TRUE(result.x < 1.0001F && result.x > 0.9999F);
       CHECK_TRUE(result.y < 0.0001F && result.y > -0.0001F);
       CHECK_TRUE(result.z < 0.0001F && result.z > -0.0001F);
@@ -502,7 +502,7 @@ int main() {
 
     mat_a = SC_SACD_Rotation_Mat4_YAxis(std::numbers::pi_v<float>);
     {
-      auto result = SC_SACD_Mat4_Vec3_Mult(&mat_a, vec_a);
+      auto result = SC_SACD_Mat4_Vec3_Mult(mat_a, vec_a);
       CHECK_TRUE(result.x < 0.0001F && result.x > -0.0001F);
       CHECK_TRUE(result.y < 0.0001F && result.y > -0.0001F);
       CHECK_TRUE(result.z < -0.9999F && result.z > -1.0001F);
@@ -511,7 +511,7 @@ int main() {
     mat_a =
         SC_SACD_Rotation_Mat4_YAxis(std::numbers::pi_v<float> * 3.0F / 2.0F);
     {
-      auto result = SC_SACD_Mat4_Vec3_Mult(&mat_a, vec_a);
+      auto result = SC_SACD_Mat4_Vec3_Mult(mat_a, vec_a);
       CHECK_TRUE(result.x < -0.9999F && result.x > -1.0001F);
       CHECK_TRUE(result.y < 0.0001F && result.y > -0.0001F);
       CHECK_TRUE(result.z < 0.0001F && result.z > -0.0001F);
@@ -524,27 +524,27 @@ int main() {
     mat_a = SC_SACD_Rotation_Mat4_YAxis(std::numbers::pi_v<float> / 4.0F);
     mat_b = SC_SACD_Rotation_Mat4_ZAxis(std::numbers::pi_v<float> / 4.0F);
     // Apply mat_a, then mat_b.
-    mat_a = SC_SACD_Mat4_Mult(&mat_b, &mat_a);
+    mat_a = SC_SACD_Mat4_Mult(mat_b, mat_a);
     {
-      auto result = SC_SACD_Mat4_Vec3_Mult(&mat_a, vec_a);
+      auto result = SC_SACD_Mat4_Vec3_Mult(mat_a, vec_a);
       CHECK_FLOAT(result.x, 0.5F);
       CHECK_FLOAT(result.y, 0.5F);
       CHECK_FLOAT(result.z, -std::sqrt(2.0F) / 2.0F);
     }
     // Apply another rotation on combined mat_a.
     mat_b = SC_SACD_Rotation_Mat4_ZAxis(std::numbers::pi_v<float> / 4.0F);
-    mat_a = SC_SACD_Mat4_Mult(&mat_b, &mat_a);
+    mat_a = SC_SACD_Mat4_Mult(mat_b, mat_a);
     {
-      auto result = SC_SACD_Mat4_Vec3_Mult(&mat_a, vec_a);
+      auto result = SC_SACD_Mat4_Vec3_Mult(mat_a, vec_a);
       CHECK_FLOAT(result.x, 0.0F);
       CHECK_FLOAT(result.y, std::sqrt(2.0F) / 2.0F);
       CHECK_FLOAT(result.z, -std::sqrt(2.0F) / 2.0F);
     }
     // Apply another rotation on combined mat_a.
     mat_b = SC_SACD_Rotation_Mat4_XAxis(std::numbers::pi_v<float> / 2.0F);
-    mat_a = SC_SACD_Mat4_Mult(&mat_b, &mat_a);
+    mat_a = SC_SACD_Mat4_Mult(mat_b, mat_a);
     {
-      auto result = SC_SACD_Mat4_Vec3_Mult(&mat_a, vec_a);
+      auto result = SC_SACD_Mat4_Vec3_Mult(mat_a, vec_a);
       CHECK_FLOAT(result.x, 0.0F);
       CHECK_FLOAT(result.y, std::sqrt(2.0F) / 2.0F);
       CHECK_FLOAT(result.z, std::sqrt(2.0F) / 2.0F);
@@ -556,13 +556,13 @@ int main() {
     SC_SACD_Mat4 mat_a = SC_SACD_Translate_Mat4(1.0F, 1.0F, 1.0F);
     SC_SACD_Mat4 mat_b =
         SC_SACD_Rotation_Mat4_ZAxis(std::numbers::pi_v<float> / 4.0F);
-    mat_a = SC_SACD_Mat4_Mult(&mat_b, &mat_a);
+    mat_a = SC_SACD_Mat4_Mult(mat_b, mat_a);
     mat_b = SC_SACD_Translate_Mat4(0.0F, 0.0F, -1.0F);
-    mat_a = SC_SACD_Mat4_Mult(&mat_b, &mat_a);
+    mat_a = SC_SACD_Mat4_Mult(mat_b, mat_a);
 
     {
       auto result =
-          SC_SACD_Mat4_Vec3_Mult(&mat_a, SC_SACD_Vec3{0.0F, 0.0F, 0.0F});
+          SC_SACD_Mat4_Vec3_Mult(mat_a, SC_SACD_Vec3{0.0F, 0.0F, 0.0F});
       CHECK_FLOAT(result.x, 0.0F);
       CHECK_FLOAT(result.z, 0.0F);
       CHECK_FLOAT(result.y, std::sqrt(2.0F));
@@ -581,14 +581,14 @@ int main() {
     a.transform = SC_SACD_Translate_Mat4(-1.0F, 0.0F, 0.0F);
     b.transform = SC_SACD_Translate_Mat4(0.0F, -1.0F, 0.0F);
 
-    CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
+    CHECK_TRUE(SC_SACD_Generic_Box_Collision(a, b));
 
     a.width = 0.9F;
     a.height = 0.9F;
     b.width = 0.9F;
     b.height = 0.9F;
 
-    CHECK_FALSE(SC_SACD_Generic_Box_Collision(&a, &b));
+    CHECK_FALSE(SC_SACD_Generic_Box_Collision(a, b));
   }
 
   // Box with Scale Mat4.
@@ -598,39 +598,39 @@ int main() {
 
     a.x = 1.1F;
     b.x = -1.1F;
-    CHECK_FALSE(SC_SACD_Generic_Box_Collision(&a, &b));
+    CHECK_FALSE(SC_SACD_Generic_Box_Collision(a, b));
 
     a.transform = SC_SACD_Scale_Mat4(2.0F, 1.0F, 1.0F);
-    CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
+    CHECK_TRUE(SC_SACD_Generic_Box_Collision(a, b));
 
     a.transform = SC_SACD_Scale_Mat4(-2.0F, 1.0F, 1.0F);
-    CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
+    CHECK_TRUE(SC_SACD_Generic_Box_Collision(a, b));
 
     a.x = 0.0F;
     b.x = 0.0F;
     a.y = 1.1F;
     b.y = -1.1F;
     a.transform = SC_SACD_Mat4_Identity();
-    CHECK_FALSE(SC_SACD_Generic_Box_Collision(&a, &b));
+    CHECK_FALSE(SC_SACD_Generic_Box_Collision(a, b));
 
     a.transform = SC_SACD_Scale_Mat4(1.0F, 2.0F, 1.0F);
-    CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
+    CHECK_TRUE(SC_SACD_Generic_Box_Collision(a, b));
 
     a.transform = SC_SACD_Scale_Mat4(1.0F, -2.0F, 1.0F);
-    CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
+    CHECK_TRUE(SC_SACD_Generic_Box_Collision(a, b));
 
     a.y = 0.0F;
     b.y = 0.0F;
     a.z = 1.1F;
     b.z = -1.1F;
     a.transform = SC_SACD_Mat4_Identity();
-    CHECK_FALSE(SC_SACD_Generic_Box_Collision(&a, &b));
+    CHECK_FALSE(SC_SACD_Generic_Box_Collision(a, b));
 
     a.transform = SC_SACD_Scale_Mat4(1.0F, 1.0F, 2.0F);
-    CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
+    CHECK_TRUE(SC_SACD_Generic_Box_Collision(a, b));
 
     a.transform = SC_SACD_Scale_Mat4(1.0F, 1.0F, -2.0F);
-    CHECK_TRUE(SC_SACD_Generic_Box_Collision(&a, &b));
+    CHECK_TRUE(SC_SACD_Generic_Box_Collision(a, b));
   }
 
   // Test Sphere/GenericBox to AABB.
@@ -670,7 +670,7 @@ int main() {
     CHECK_FLOAT(aabb.depth, box.depth);
 
     auto translate = SC_SACD_Translate_Mat4(-5.0F, -4.0F, 1.0F);
-    box.transform = SC_SACD_Mat4_Mult(&translate, &box.transform);
+    box.transform = SC_SACD_Mat4_Mult(translate, box.transform);
 
     aabb = SC_SACD_Generic_Box_To_AABB(box);
     CHECK_FLOAT(aabb.x, box.x - 5.0F);
