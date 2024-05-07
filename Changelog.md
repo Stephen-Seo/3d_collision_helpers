@@ -34,13 +34,17 @@ same center.
 
 ## Version 2.0.0
 
-Add collision detection with Spheres.
-
-Add some more vector/matrix math stuff.
+### Breaking Changes
 
 Replace Mat3 with Mat4.
 
 Replace xyz-axis rotation floats in GenericBox with Mat4.
+
+### Non-Breaking Changes
+
+Add collision detection with Spheres.
+
+Add some more vector/matrix math stuff.
 
 ## Version 1.0.0
 
