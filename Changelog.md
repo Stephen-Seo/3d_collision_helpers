@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 3.0.1
+
+Remove unnecessary header include in sc_sacd.cpp. This should fix builds that
+do not target C++23 as the header is from C++23.
+
 ## Version 3.0.0
 
 ### Breaking Changes
