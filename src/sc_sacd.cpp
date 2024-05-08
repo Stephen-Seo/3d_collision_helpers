@@ -4,7 +4,6 @@
 #include <array>
 #include <cmath>
 #include <span>
-#include <stdfloat>
 #include <vector>
 
 // =============================================================================
