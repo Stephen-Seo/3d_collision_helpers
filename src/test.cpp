@@ -754,6 +754,92 @@ int main() {
                                     2.0F);
   }
 
+  // Test Sum/Diff/Mult/Div Vec3.
+  {
+    SC_SACD_Vec3 a{1.0F, 2.0F, 3.0F};
+    SC_SACD_Vec3 b{10.0F, 100.0F, 1000.0F};
+
+    SC_SACD_Vec3 vec_result = SC_SACD_Vec3_Sum(a, b);
+    CHECK_FLOAT(vec_result.x, 11.0F);
+    CHECK_FLOAT(vec_result.y, 102.0F);
+    CHECK_FLOAT(vec_result.z, 1003.0F);
+
+    vec_result = SC_SACD_Vec3_Difference(a, b);
+    CHECK_FLOAT(vec_result.x, -9.0F);
+    CHECK_FLOAT(vec_result.y, -98.0F);
+    CHECK_FLOAT(vec_result.z, -997.0F);
+
+    vec_result = SC_SACD_Vec3_Mult(a, 2.0F);
+    CHECK_FLOAT(vec_result.x, 2.0F);
+    CHECK_FLOAT(vec_result.y, 4.0F);
+    CHECK_FLOAT(vec_result.z, 6.0F);
+
+    vec_result = SC_SACD_Vec3_Div(a, 2.0F);
+    CHECK_FLOAT(vec_result.x, 0.5F);
+    CHECK_FLOAT(vec_result.y, 1.0F);
+    CHECK_FLOAT(vec_result.z, 1.5F);
+  }
+
+  // Test project.
+  {
+    SC_SACD_Vec3 a{2.0F, 3.0F, 4.0F};
+    SC_SACD_Vec3 target{0.0F, 1.0F, 0.0F};
+
+    SC_SACD_Vec3 result = SC_SACD_Vec3_Project(a, target);
+    CHECK_FLOAT(result.x, 0.0F);
+    CHECK_FLOAT(result.y, 3.0F);
+    CHECK_FLOAT(result.z, 0.0F);
+
+    target.x = 2.0F;
+    target.y = 0.0F;
+    result = SC_SACD_Vec3_Project(a, target);
+    CHECK_FLOAT(result.x, 2.0F);
+    CHECK_FLOAT(result.y, 0.0F);
+    CHECK_FLOAT(result.z, 0.0F);
+
+    target.x = 0.0F;
+    target.z = 9.0F;
+    result = SC_SACD_Vec3_Project(a, target);
+    CHECK_FLOAT(result.x, 0.0F);
+    CHECK_FLOAT(result.y, 0.0F);
+    CHECK_FLOAT(result.z, 4.0F);
+  }
+
+  // Test reflect.
+  {
+    SC_SACD_Vec3 a{2.0F, 3.0F, 4.0F};
+    SC_SACD_Vec3 target{0.0F, 3.0F, 0.0F};
+
+    SC_SACD_Vec3 result = SC_SACD_Vec3_Reflect(a, target);
+    CHECK_FLOAT(result.x, -2.0F);
+    CHECK_FLOAT(result.y, 3.0F);
+    CHECK_FLOAT(result.z, -4.0F);
+
+    target.x = 9.0F;
+    target.y = 0.0F;
+
+    result = SC_SACD_Vec3_Reflect(a, target);
+    CHECK_FLOAT(result.x, 2.0F);
+    CHECK_FLOAT(result.y, -3.0F);
+    CHECK_FLOAT(result.z, -4.0F);
+
+    target.x = 0.0F;
+    target.z = 110.0F;
+
+    result = SC_SACD_Vec3_Reflect(a, target);
+    CHECK_FLOAT(result.x, -2.0F);
+    CHECK_FLOAT(result.y, -3.0F);
+    CHECK_FLOAT(result.z, 4.0F);
+
+    target.y = 1.0F;
+    target.z = 1.0F;
+
+    result = SC_SACD_Vec3_Reflect(a, target);
+    CHECK_FLOAT(result.x, -2.0F);
+    CHECK_FLOAT(result.y, 4.0F);
+    CHECK_FLOAT(result.z, 3.0F);
+  }
+
   std::cout << "Checks checked: " << checks_checked << '\n'
             << "Checks passed:  " << checks_passed << '\n';
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 3.1.0
+
+Add Vec3 helper functions.
+
+Add Vec3 project and reflect functions.
+
 ## Version 3.0.1
 
 Remove unnecessary header include in sc_sacd.cpp. This should fix builds that
