@@ -136,6 +136,20 @@ SC_SACD_Generic_Box_To_AABB(SC_SACD_Generic_Box s);
 SC_SACD_EXPORT SC_SACD_AABB_Box SC_SACD_AABB_Combine(SC_SACD_AABB_Box a,
                                                      SC_SACD_AABB_Box b);
 
+SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Vec3_Sum(SC_SACD_Vec3 a, SC_SACD_Vec3 b);
+SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Vec3_Difference(SC_SACD_Vec3 a,
+                                                    SC_SACD_Vec3 b);
+SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Vec3_Mult(SC_SACD_Vec3 vec, float scalar);
+SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Vec3_Div(SC_SACD_Vec3 vec, float scalar);
+
+/// Projects "vec" onto "target".
+SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Vec3_Project(SC_SACD_Vec3 vec,
+                                                 SC_SACD_Vec3 target);
+
+/// Reflects "vec" about "target".
+SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Vec3_Reflect(SC_SACD_Vec3 vec,
+                                                 SC_SACD_Vec3 target);
+
 #ifdef __cplusplus
 }
 #endif

@@ -669,3 +669,29 @@ SC_SACD_AABB_Box SC_SACD_AABB_Combine(SC_SACD_AABB_Box a, SC_SACD_AABB_Box b) {
                           temp_b,
                           temp_c};
 }
+
+SC_SACD_Vec3 SC_SACD_Vec3_Sum(SC_SACD_Vec3 a, SC_SACD_Vec3 b) { return a + b; }
+
+SC_SACD_Vec3 SC_SACD_Vec3_Difference(SC_SACD_Vec3 a, SC_SACD_Vec3 b) {
+  return a - b;
+}
+
+SC_SACD_Vec3 SC_SACD_Vec3_Mult(SC_SACD_Vec3 vec, float scalar) {
+  return vec * scalar;
+}
+
+SC_SACD_Vec3 SC_SACD_Vec3_Div(SC_SACD_Vec3 vec, float scalar) {
+  return vec / scalar;
+}
+
+SC_SACD_Vec3 SC_SACD_Vec3_Project(SC_SACD_Vec3 vec, SC_SACD_Vec3 target) {
+  float upper_dot_product = SC_SACD_Dot_Product(vec, target);
+  float lower_dot_product = SC_SACD_Dot_Product(target, target);
+
+  return target * (upper_dot_product / lower_dot_product);
+}
+
+SC_SACD_Vec3 SC_SACD_Vec3_Reflect(SC_SACD_Vec3 vec, SC_SACD_Vec3 target) {
+  SC_SACD_Vec3 proj = SC_SACD_Vec3_Project(vec, target);
+  return proj * 2.0F - vec;
+}
