@@ -142,6 +142,11 @@ SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Vec3_Difference(SC_SACD_Vec3 a,
 SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Vec3_Mult(SC_SACD_Vec3 vec, float scalar);
 SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Vec3_Div(SC_SACD_Vec3 vec, float scalar);
 
+SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Vec3_Negate(SC_SACD_Vec3 vec);
+
+/// Turns vec into a unit vector and returns the unit vector.
+SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Vec3_Normalize(SC_SACD_Vec3 vec);
+
 /// Projects "vec" onto "target".
 SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Vec3_Project(SC_SACD_Vec3 vec,
                                                  SC_SACD_Vec3 target);

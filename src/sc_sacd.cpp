@@ -684,6 +684,14 @@ SC_SACD_Vec3 SC_SACD_Vec3_Div(SC_SACD_Vec3 vec, float scalar) {
   return vec / scalar;
 }
 
+SC_SACD_Vec3 SC_SACD_Vec3_Negate(SC_SACD_Vec3 vec) {
+  return SC_SACD_Vec3{-vec.x, -vec.y, -vec.z};
+}
+
+SC_SACD_Vec3 SC_SACD_Vec3_Normalize(SC_SACD_Vec3 vec) {
+  return vec / SC_SACD_Vec3_Length(vec);
+}
+
 SC_SACD_Vec3 SC_SACD_Vec3_Project(SC_SACD_Vec3 vec, SC_SACD_Vec3 target) {
   float upper_dot_product = SC_SACD_Dot_Product(vec, target);
   float lower_dot_product = SC_SACD_Dot_Product(target, target);

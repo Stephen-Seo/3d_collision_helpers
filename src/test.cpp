@@ -840,6 +840,68 @@ int main() {
     CHECK_FLOAT(result.z, 3.0F);
   }
 
+  // Test negate.
+  {
+      SC_SACD_Vec3 vec{1.0F, 2.0F, 3.0F};
+      vec = SC_SACD_Vec3_Negate(vec);
+      CHECK_FLOAT(vec.x, -1.0F);
+      CHECK_FLOAT(vec.y, -2.0F);
+      CHECK_FLOAT(vec.z, -3.0F);
+  }
+
+  // Test normalize.
+  {
+      SC_SACD_Vec3 vec{1.0F, 0.0F, 0.0F};
+      vec = SC_SACD_Vec3_Normalize(vec);
+      CHECK_FLOAT(vec.x, 1.0F);
+      CHECK_FLOAT(vec.y, 0.0F);
+      CHECK_FLOAT(vec.z, 0.0F);
+
+      vec.x = 0.0F;
+      vec.y = -1.0F;
+      vec = SC_SACD_Vec3_Normalize(vec);
+      CHECK_FLOAT(vec.x, 0.0F);
+      CHECK_FLOAT(vec.y, -1.0F);
+      CHECK_FLOAT(vec.z, 0.0F);
+
+      vec.y = 0.0F;
+      vec.z = 0.7F;
+      vec = SC_SACD_Vec3_Normalize(vec);
+      CHECK_FLOAT(vec.x, 0.0F);
+      CHECK_FLOAT(vec.y, 0.0F);
+      CHECK_FLOAT(vec.z, 1.0F);
+
+      vec.x = 1.0F;
+      vec = SC_SACD_Vec3_Normalize(vec);
+      CHECK_FLOAT(vec.x, std::sqrt(0.5F));
+      CHECK_FLOAT(vec.y, 0.0F);
+      CHECK_FLOAT(vec.z, std::sqrt(0.5F));
+
+      vec.x = 1.0F;
+      vec.y = 1.0F;
+      vec.z = 1.0F;
+      vec = SC_SACD_Vec3_Normalize(vec);
+      CHECK_FLOAT(vec.x, std::sqrt(1.0F / 3.0F));
+      CHECK_FLOAT(vec.y, std::sqrt(1.0F / 3.0F));
+      CHECK_FLOAT(vec.z, std::sqrt(1.0F / 3.0F));
+
+      vec.x = 1.0F;
+      vec.y = -1.0F;
+      vec.z = -1.0F;
+      vec = SC_SACD_Vec3_Normalize(vec);
+      CHECK_FLOAT(vec.x, std::sqrt(1.0F / 3.0F));
+      CHECK_FLOAT(vec.y, -std::sqrt(1.0F / 3.0F));
+      CHECK_FLOAT(vec.z, -std::sqrt(1.0F / 3.0F));
+
+      vec.x = 1.0F;
+      vec.y = 2.0F;
+      vec.z = 3.0F;
+      vec = SC_SACD_Vec3_Normalize(vec);
+      CHECK_FLOAT(vec.x, std::sqrt(1.0F / 14.0F));
+      CHECK_FLOAT(vec.y, std::sqrt(4.0F / 14.0F));
+      CHECK_FLOAT(vec.z, std::sqrt(9.0F / 14.0F));
+  }
+
   std::cout << "Checks checked: " << checks_checked << '\n'
             << "Checks passed:  " << checks_passed << '\n';
 
