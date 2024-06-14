@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 3.2.1
+
+Add workflow to build shared/static libs available
+[here](https://git.seodisparate.com/stephenseo/3d_collision_helpers/releases).
+
 ## Version 3.2.0
 
 Add Vec3 negate and normalize functions.
