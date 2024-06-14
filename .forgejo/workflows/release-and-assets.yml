@@ -1,0 +1,89 @@
+name: Build for Releases
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  ensure-release-exists:
+    runs-on: any_archLinux
+    steps:
+      - name: Ensure that release exists
+        id: release_exists
+        run: |
+          curl -X GET "https://git.seodisparate.com/api/v1/repos/stephenseo/3d_collision_helpers/releases/tags/${GITHUB_REF_NAME}" \
+          -H "Authorization: token ${GITHUB_TOKEN}" \
+          -H 'accept: application/json' -o release_check_resp.json 2>/dev/null \
+          -w '%{http_code}\n' | sed 's/^\([0-9]\+\)/http_code=\1/' > check_release_http_code
+          test "$(cat check_release_http_code)" = "http_code=404" && \
+          curl --fail-with-body -X 'POST' \
+          "https://git.seodisparate.com/api/v1/repos/stephenseo/3d_collision_helpers/releases" \
+          -H 'accept: application/json' \
+          -H "Authorization: token ${GITHUB_TOKEN}" \
+          -H 'Content-Type: application/json' \
+          -d "{
+          \"name\": \"3d_collision_helpers version ${GITHUB_REF_NAME}\",
+          \"tag_name\": \"${GITHUB_REF_NAME}\"
+          }" >&/dev/null
+
+  assets-release-x86_64:
+    needs: ensure-release-exists
+    runs-on: any_archLinux
+    steps:
+      - name: Check and push assets
+        id: check_release_assets_x86_64
+        run: |
+          THE_CURRENT_WORKING_DIRECTORY="$(pwd)"
+          curl -X 'GET' \
+          "https://git.seodisparate.com/api/v1/repos/stephenseo/3d_collision_helpers/releases/tags/${GITHUB_REF_NAME}" \
+          -H "Authorization: token ${GITHUB_TOKEN}" \
+          -H 'accept: application/json' > release_info.json
+          jq '.assets.[].name' < release_info.json | tr -d '"' > assets_list
+          SHARED_LIB_ASSET_NAME="3d_collision_helpers_${GITHUB_REF_NAME}_shared.tar.zst"
+          STATIC_LIB_ASSET_NAME="3d_collision_helpers_${GITHUB_REF_NAME}_static.tar.zst"
+          SHARED_LIB_ASSET_EXISTS=0
+          STATIC_LIB_ASSET_EXISTS=0
+          for asset in $(cat assets_list); do
+            if [[ "$asset" == "$SHARED_LIB_ASSET_NAME" ]]; then
+              SHARED_LIB_ASSET_EXISTS=1
+            fi
+            if [[ "$asset" == "$STATIC_LIB_ASSET_NAME" ]]; then
+              STATIC_LIB_ASSET_EXISTS=1
+            fi
+          done
+          test -d "$THE_CURRENT_WORKING_DIRECTORY/3dcolhelpers_cloned" || git clone --depth=1 --no-single-branch https://${GITHUB_TOKEN}@git.seodisparate.com/stephenseo/3d_collision_helpers.git "$THE_CURRENT_WORKING_DIRECTORY/3dcolhelpers_cloned"
+          pushd "$THE_CURRENT_WORKING_DIRECTORY/3dcolhelpers_cloned" >&/dev/null
+          if ! (( SHARED_LIB_ASSET_EXISTS )); then
+            git clean -xfd && git restore . && git checkout ${GITHUB_REF_NAME}
+            echo 'Building shared libs...'
+            cmake -S . -B buildRelease -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=On -DCMAKE_INSTALL_PREFIX=/usr
+            make -C buildRelease
+            pushd buildRelease
+            make DESTDIR=out_shared install
+            cd out_shared
+            fakeroot tar --sort=name -cv usr | zstd --ultra -20 > "$THE_CURRENT_WORKING_DIRECTORY/$SHARED_LIB_ASSET_NAME"
+            popd
+            curl --fail-with-body -X POST \
+            "https://git.seodisparate.com/api/v1/repos/stephenseo/3d_collision_helpers/releases/$(jq .id < $THE_CURRENT_WORKING_DIRECTORY/release_info.json)/assets" \
+            -H 'accept: application/json' \
+            -H "Authorization: token ${GITHUB_TOKEN}" \
+            -H 'Content-Type: multipart/form-data' \
+            -F "attachment=@${THE_CURRENT_WORKING_DIRECTORY}/$SHARED_LIB_ASSET_NAME;type=application/zstd" > client_attach.json
+          fi
+          if ! (( STATIC_LIB_ASSET_EXISTS )); then
+            git clean -xfd && git restore . && git checkout ${GITHUB_REF_NAME}
+            echo 'Building static libs...'
+            cmake -S . -B buildRelease -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=Off -DCMAKE_INSTALL_PREFIX=/usr
+            make -C buildRelease
+            pushd buildRelease
+            make DESTDIR=out_static install
+            cd out_static
+            fakeroot tar --sort=name -cv usr | zstd --ultra -20 > "$THE_CURRENT_WORKING_DIRECTORY/$STATIC_LIB_ASSET_NAME"
+            popd
+            curl --fail-with-body -X POST \
+            "https://git.seodisparate.com/api/v1/repos/stephenseo/3d_collision_helpers/releases/$(jq .id < $THE_CURRENT_WORKING_DIRECTORY/release_info.json)/assets" \
+            -H 'accept: application/json' \
+            -H "Authorization: token ${GITHUB_TOKEN}" \
+            -H 'Content-Type: multipart/form-data' \
+            -F "attachment=@${THE_CURRENT_WORKING_DIRECTORY}/$STATIC_LIB_ASSET_NAME;type=application/zstd" > client_attach.json
+          fi
