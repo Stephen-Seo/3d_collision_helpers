@@ -28,7 +28,7 @@ jobs:
 
   assets-release-x86_64:
     needs: ensure-release-exists
-    runs-on: any_archLinux
+    runs-on: x86_64_archLinux
     steps:
       - name: Check and push assets
         id: check_release_assets_x86_64
