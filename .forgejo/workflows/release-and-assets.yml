@@ -63,6 +63,19 @@ jobs:
             cd out_shared
             fakeroot tar --sort=name -cv usr | zstd --ultra -20 > "$THE_CURRENT_WORKING_DIRECTORY/$SHARED_LIB_ASSET_NAME"
             popd
+            curl --fail-with-body -X GET \
+            "https://git.seodisparate.com/api/v1/repos/stephenseo/3d_collision_helpers/releases/$(jq .id < $THE_CURRENT_WORKING_DIRECTORY/release_info.json)" \
+            -H 'accept: application/json' \
+            -o current_release_info.json 2>/dev/null
+            curl --fail-with-body -X PATCH \
+            "https://git.seodisparate.com/api/v1/repos/stephenseo/3d_collision_helpers/releases/$(jq .id < $THE_CURRENT_WORKING_DIRECTORY/release_info.json)" \
+            -H 'accept: application/json' \
+            -H "Authorization: token ${GITHUB_TOKEN}" \
+            -H 'Content-Type: application/json' \
+            -d "{
+              \"body\":\"$(jq .body < current_release_info.json | sed -e 's/^"//' -e 's/"$//')
+              SHA256SUM $(find "$THE_CURRENT_WORKING_DIRECTORY" -maxdepth 1 -name "*$SHARED_LIB_ASSET_NAME" -execdir sha256sum '{}' ';')\"
+            }" >&/dev/null
             curl --fail-with-body -X POST \
             "https://git.seodisparate.com/api/v1/repos/stephenseo/3d_collision_helpers/releases/$(jq .id < $THE_CURRENT_WORKING_DIRECTORY/release_info.json)/assets" \
             -H 'accept: application/json' \
@@ -80,6 +93,19 @@ jobs:
             cd out_static
             fakeroot tar --sort=name -cv usr | zstd --ultra -20 > "$THE_CURRENT_WORKING_DIRECTORY/$STATIC_LIB_ASSET_NAME"
             popd
+            curl --fail-with-body -X GET \
+            "https://git.seodisparate.com/api/v1/repos/stephenseo/3d_collision_helpers/releases/$(jq .id < $THE_CURRENT_WORKING_DIRECTORY/release_info.json)" \
+            -H 'accept: application/json' \
+            -o current_release_info.json 2>/dev/null
+            curl --fail-with-body -X PATCH \
+            "https://git.seodisparate.com/api/v1/repos/stephenseo/3d_collision_helpers/releases/$(jq .id < $THE_CURRENT_WORKING_DIRECTORY/release_info.json)" \
+            -H 'accept: application/json' \
+            -H "Authorization: token ${GITHUB_TOKEN}" \
+            -H 'Content-Type: application/json' \
+            -d "{
+              \"body\":\"$(jq .body < current_release_info.json | sed -e 's/^"//' -e 's/"$//')
+              SHA256SUM $(find "$THE_CURRENT_WORKING_DIRECTORY" -maxdepth 1 -name "*$STATIC_LIB_ASSET_NAME" -execdir sha256sum '{}' ';')\"
+            }" >&/dev/null
             curl --fail-with-body -X POST \
             "https://git.seodisparate.com/api/v1/repos/stephenseo/3d_collision_helpers/releases/$(jq .id < $THE_CURRENT_WORKING_DIRECTORY/release_info.json)/assets" \
             -H 'accept: application/json' \
