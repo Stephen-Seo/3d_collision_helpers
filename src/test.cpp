@@ -902,6 +902,56 @@ int main() {
       CHECK_FLOAT(vec.z, std::sqrt(9.0F / 14.0F));
   }
 
+  // Test axis-angle to rotation matrix.
+  {
+    // About Z-axis.
+    SC_SACD_Vec3 axis{0.0F, 0.0F, 1.0F};
+    float angle = std::numbers::pi_v<float> / 2.0F;
+
+    SC_SACD_Mat3 rot_from_axis_angle = SC_SACD_ExpMap(axis, angle);
+    SC_SACD_Mat3 rotation_mat = SC_SACD_Rotation_Mat3_ZAxis(angle);
+
+    SC_SACD_Vec3 vec{1.0F, 1.0F, 1.0F};
+
+    SC_SACD_Vec3 transformed_vec0 = SC_SACD_Mat3_Vec3_Mult(rot_from_axis_angle, vec);
+    SC_SACD_Vec3 transformed_vec1 = SC_SACD_Mat3_Vec3_Mult(rotation_mat, vec);
+
+    CHECK_FLOAT(transformed_vec0.x, transformed_vec1.x);
+    CHECK_FLOAT(transformed_vec0.y, transformed_vec1.y);
+    CHECK_FLOAT(transformed_vec0.z, transformed_vec1.z);
+
+    // About X-axis.
+    axis = SC_SACD_Vec3{1.0F, 0.0F, 0.0F};
+
+    rot_from_axis_angle = SC_SACD_ExpMap(axis, angle);
+    rotation_mat = SC_SACD_Rotation_Mat3_XAxis(angle);
+
+    transformed_vec0 = SC_SACD_Mat3_Vec3_Mult(rot_from_axis_angle, vec);
+    transformed_vec1 = SC_SACD_Mat3_Vec3_Mult(rotation_mat, vec);
+
+    CHECK_FLOAT(transformed_vec0.x, transformed_vec1.x);
+    CHECK_FLOAT(transformed_vec0.y, transformed_vec1.y);
+    CHECK_FLOAT(transformed_vec0.z, transformed_vec1.z);
+
+    // About Y-axis.
+    axis = SC_SACD_Vec3{0.0F, 1.0F, 0.0F};
+
+    rot_from_axis_angle = SC_SACD_ExpMap(axis, angle);
+    rotation_mat = SC_SACD_Rotation_Mat3_YAxis(angle);
+
+    transformed_vec0 = SC_SACD_Mat3_Vec3_Mult(rot_from_axis_angle, vec);
+    transformed_vec1 = SC_SACD_Mat3_Vec3_Mult(rotation_mat, vec);
+
+    CHECK_FLOAT(transformed_vec0.x, transformed_vec1.x);
+    CHECK_FLOAT(transformed_vec0.y, transformed_vec1.y);
+    CHECK_FLOAT(transformed_vec0.z, transformed_vec1.z);
+  }
+
+  // Test rotation matrix to axis-angle.
+  {
+    // TODO: implement rotating Vec3 with axis-angle so that this can be tested.
+  }
+
   std::cout << "Checks checked: " << checks_checked << '\n'
             << "Checks passed:  " << checks_passed << '\n';
 

@@ -24,6 +24,12 @@ typedef struct SC_SACD_EXPORT SC_SACD_Vec3 {
   float x, y, z;
 } SC_SACD_Vec3;
 
+typedef struct SC_SACD_EXPORT SC_SACD_Mat3 {
+  float x0, x1, x2;
+  float y0, y1, y2;
+  float z0, z1, z2;
+} SC_SACD_Mat3;
+
 typedef struct SC_SACD_EXPORT SC_SACD_Mat4 {
   float x0, x1, x2, x3;
   float y0, y1, y2, y3;
@@ -100,6 +106,8 @@ SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Cross_Product(SC_SACD_Vec3 a,
 
 SC_SACD_EXPORT SC_SACD_Mat4 SC_SACD_Mat4_Identity(void);
 
+SC_SACD_EXPORT SC_SACD_Mat4 SC_SACD_Mat4_Sum(SC_SACD_Mat4 a, SC_SACD_Mat4 b);
+
 SC_SACD_EXPORT SC_SACD_Mat4 SC_SACD_Mat4_Mult(SC_SACD_Mat4 a, SC_SACD_Mat4 b);
 
 SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Mat4_Vec3_Mult(SC_SACD_Mat4 mat,
@@ -154,6 +162,23 @@ SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Vec3_Project(SC_SACD_Vec3 vec,
 /// Reflects "vec" about "target".
 SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Vec3_Reflect(SC_SACD_Vec3 vec,
                                                  SC_SACD_Vec3 target);
+
+SC_SACD_EXPORT SC_SACD_Mat4 SC_SACD_Mat3_Promote(SC_SACD_Mat3 mat3);
+SC_SACD_EXPORT SC_SACD_Mat3 SC_SACD_Mat4_Demote(SC_SACD_Mat4 mat4);
+
+SC_SACD_EXPORT SC_SACD_Mat3 SC_SACD_Mat3_Identity(void);
+SC_SACD_EXPORT SC_SACD_Mat3 SC_SACD_Mat3_Sum(SC_SACD_Mat3 a, SC_SACD_Mat3 b);
+SC_SACD_EXPORT SC_SACD_Mat3 SC_SACD_Mat3_Mult(SC_SACD_Mat3 a, SC_SACD_Mat3 b);
+SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_Mat3_Vec3_Mult(SC_SACD_Mat3 mat3,
+                                                   SC_SACD_Vec3 vec);
+SC_SACD_EXPORT SC_SACD_Mat3 SC_SACD_Rotation_Mat3_XAxis(float x_radians);
+SC_SACD_EXPORT SC_SACD_Mat3 SC_SACD_Rotation_Mat3_YAxis(float y_radians);
+SC_SACD_EXPORT SC_SACD_Mat3 SC_SACD_Rotation_Mat3_ZAxis(float z_radians);
+SC_SACD_EXPORT SC_SACD_Mat3 SC_SACD_Scale_Mat3(float x, float y, float z);
+
+SC_SACD_EXPORT SC_SACD_Mat3 SC_SACD_ExpMap(SC_SACD_Vec3 axis, float angle);
+SC_SACD_EXPORT float SC_SACD_LogMap_Angle(SC_SACD_Mat3 mat3);
+SC_SACD_EXPORT SC_SACD_Vec3 SC_SACD_LogMap_Axis(SC_SACD_Mat3 mat3, float angle);
 
 #ifdef __cplusplus
 }
