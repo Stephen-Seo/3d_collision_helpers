@@ -2,6 +2,8 @@
 
 ## Upcoming Changes
 
+## Version 3.3.0
+
 Refactor some internal operators for Vec3/Mat4 operations (like mult., sum,
 etc.)
 
