@@ -949,7 +949,39 @@ int main() {
 
   // Test rotation matrix to axis-angle.
   {
-    // TODO: implement rotating Vec3 with axis-angle so that this can be tested.
+      // X-axis.
+      float angle = std::numbers::pi_v<float> / 2.0F;
+      SC_SACD_Mat3 rot_mat = SC_SACD_Rotation_Mat3_XAxis(angle);
+
+      float derived_angle = SC_SACD_LogMap_Angle(rot_mat);
+      CHECK_FLOAT(derived_angle, angle);
+
+      SC_SACD_Vec3 derived_axis = SC_SACD_LogMap_Axis(rot_mat, angle);
+      CHECK_FLOAT(derived_axis.x, 1.0F);
+      CHECK_FLOAT(derived_axis.y, 0.0F);
+      CHECK_FLOAT(derived_axis.z, 0.0F);
+
+      // Y-axis.
+      rot_mat = SC_SACD_Rotation_Mat3_YAxis(angle);
+
+      derived_angle = SC_SACD_LogMap_Angle(rot_mat);
+      CHECK_FLOAT(derived_angle, angle);
+
+      derived_axis = SC_SACD_LogMap_Axis(rot_mat, angle);
+      CHECK_FLOAT(derived_axis.x, 0.0F);
+      CHECK_FLOAT(derived_axis.y, 1.0F);
+      CHECK_FLOAT(derived_axis.z, 0.0F);
+
+      // Z-axis.
+      rot_mat = SC_SACD_Rotation_Mat3_ZAxis(angle);
+
+      derived_angle = SC_SACD_LogMap_Angle(rot_mat);
+      CHECK_FLOAT(derived_angle, angle);
+
+      derived_axis = SC_SACD_LogMap_Axis(rot_mat, angle);
+      CHECK_FLOAT(derived_axis.x, 0.0F);
+      CHECK_FLOAT(derived_axis.y, 0.0F);
+      CHECK_FLOAT(derived_axis.z, 1.0F);
   }
 
   std::cout << "Checks checked: " << checks_checked << '\n'

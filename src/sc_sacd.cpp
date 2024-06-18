@@ -853,6 +853,6 @@ float SC_SACD_LogMap_Angle(SC_SACD_Mat3 mat3) {
 }
 
 SC_SACD_Vec3 SC_SACD_LogMap_Axis(SC_SACD_Mat3 mat3, float angle) {
-  return SC_SACD_Vec3{mat3.y2 - mat3.z1, mat3.z0 - mat3.x2, mat3.x1 - mat3.y0} *
+  return SC_SACD_Vec3{mat3.z1 - mat3.y2, mat3.x2 - mat3.z0, mat3.y0 - mat3.x1} *
          (1.0F / (2.0F * std::sin(angle)));
 }
