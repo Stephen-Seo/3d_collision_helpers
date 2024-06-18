@@ -11,7 +11,7 @@ Added Mat3 and helper functions related to Mat3.
 
 Implemented conversion from axis/angle to rotation matrix (Mat3).
 
-Implemented conversion from rotation matrix (mat3) to axis/angle (untested).
+Implemented conversion from rotation matrix (mat3) to axis/angle.
 
 ## Version 3.2.1
 
