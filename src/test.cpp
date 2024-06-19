@@ -11,19 +11,21 @@ static int checks_passed = 0;
   do {                                                                \
     ++checks_checked;                                                 \
     if (!(x)) {                                                       \
-      std::cout << "CHECK_TRUE at line " << __LINE__ << " failed!\n"; \
+      std::cout << "CHECK_TRUE at line " << __LINE__ << " failed: "   \
+        << #x << '\n';                                                \
     } else {                                                          \
       ++checks_passed;                                                \
     }                                                                 \
   } while (false);
-#define CHECK_FALSE(x)                                                 \
-  do {                                                                 \
-    ++checks_checked;                                                  \
-    if (x) {                                                           \
-      std::cout << "CHECK_FALSE at line " << __LINE__ << " failed!\n"; \
-    } else {                                                           \
-      ++checks_passed;                                                 \
-    }                                                                  \
+#define CHECK_FALSE(x)                                                \
+  do {                                                                \
+    ++checks_checked;                                                 \
+    if (x) {                                                          \
+      std::cout << "CHECK_FALSE at line " << __LINE__ << " failed: "  \
+        << #x << '\n';                                                \
+    } else {                                                          \
+      ++checks_passed;                                                \
+    }                                                                 \
   } while (false);
 
 #define CHECK_FLOAT(var, value)                                        \
@@ -32,7 +34,8 @@ static int checks_passed = 0;
     if ((var) > (value)-0.0001F && (var) < (value) + 0.0001F) {        \
       ++checks_passed;                                                 \
     } else {                                                           \
-      std::cout << "CHECK_FLOAT at line " << __LINE__ << " failed!\n"; \
+      std::cout << "CHECK_FLOAT at line " << __LINE__ << " failed: "   \
+        << #var << " != " << #value << '\n';                           \
     }                                                                  \
   } while (false);
 
