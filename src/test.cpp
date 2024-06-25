@@ -11,19 +11,21 @@ static int checks_passed = 0;
   do {                                                                \
     ++checks_checked;                                                 \
     if (!(x)) {                                                       \
-      std::cout << "CHECK_TRUE at line " << __LINE__ << " failed!\n"; \
+      std::cout << "CHECK_TRUE at line " << __LINE__ << " failed: "   \
+        << #x << '\n';                                                \
     } else {                                                          \
       ++checks_passed;                                                \
     }                                                                 \
   } while (false);
-#define CHECK_FALSE(x)                                                 \
-  do {                                                                 \
-    ++checks_checked;                                                  \
-    if (x) {                                                           \
-      std::cout << "CHECK_FALSE at line " << __LINE__ << " failed!\n"; \
-    } else {                                                           \
-      ++checks_passed;                                                 \
-    }                                                                  \
+#define CHECK_FALSE(x)                                                \
+  do {                                                                \
+    ++checks_checked;                                                 \
+    if (x) {                                                          \
+      std::cout << "CHECK_FALSE at line " << __LINE__ << " failed: "  \
+        << #x << '\n';                                                \
+    } else {                                                          \
+      ++checks_passed;                                                \
+    }                                                                 \
   } while (false);
 
 #define CHECK_FLOAT(var, value)                                        \
@@ -32,7 +34,8 @@ static int checks_passed = 0;
     if ((var) > (value)-0.0001F && (var) < (value) + 0.0001F) {        \
       ++checks_passed;                                                 \
     } else {                                                           \
-      std::cout << "CHECK_FLOAT at line " << __LINE__ << " failed!\n"; \
+      std::cout << "CHECK_FLOAT at line " << __LINE__ << " failed: "   \
+        << #var << " != " << #value << '\n';                           \
     }                                                                  \
   } while (false);
 
@@ -900,6 +903,88 @@ int main() {
       CHECK_FLOAT(vec.x, std::sqrt(1.0F / 14.0F));
       CHECK_FLOAT(vec.y, std::sqrt(4.0F / 14.0F));
       CHECK_FLOAT(vec.z, std::sqrt(9.0F / 14.0F));
+  }
+
+  // Test axis-angle to rotation matrix.
+  {
+    // About Z-axis.
+    SC_SACD_Vec3 axis{0.0F, 0.0F, 1.0F};
+    float angle = std::numbers::pi_v<float> / 2.0F;
+
+    SC_SACD_Mat3 rot_from_axis_angle = SC_SACD_ExpMap(axis, angle);
+    SC_SACD_Mat3 rotation_mat = SC_SACD_Rotation_Mat3_ZAxis(angle);
+
+    SC_SACD_Vec3 vec{1.0F, 1.0F, 1.0F};
+
+    SC_SACD_Vec3 transformed_vec0 = SC_SACD_Mat3_Vec3_Mult(rot_from_axis_angle, vec);
+    SC_SACD_Vec3 transformed_vec1 = SC_SACD_Mat3_Vec3_Mult(rotation_mat, vec);
+
+    CHECK_FLOAT(transformed_vec0.x, transformed_vec1.x);
+    CHECK_FLOAT(transformed_vec0.y, transformed_vec1.y);
+    CHECK_FLOAT(transformed_vec0.z, transformed_vec1.z);
+
+    // About X-axis.
+    axis = SC_SACD_Vec3{1.0F, 0.0F, 0.0F};
+
+    rot_from_axis_angle = SC_SACD_ExpMap(axis, angle);
+    rotation_mat = SC_SACD_Rotation_Mat3_XAxis(angle);
+
+    transformed_vec0 = SC_SACD_Mat3_Vec3_Mult(rot_from_axis_angle, vec);
+    transformed_vec1 = SC_SACD_Mat3_Vec3_Mult(rotation_mat, vec);
+
+    CHECK_FLOAT(transformed_vec0.x, transformed_vec1.x);
+    CHECK_FLOAT(transformed_vec0.y, transformed_vec1.y);
+    CHECK_FLOAT(transformed_vec0.z, transformed_vec1.z);
+
+    // About Y-axis.
+    axis = SC_SACD_Vec3{0.0F, 1.0F, 0.0F};
+
+    rot_from_axis_angle = SC_SACD_ExpMap(axis, angle);
+    rotation_mat = SC_SACD_Rotation_Mat3_YAxis(angle);
+
+    transformed_vec0 = SC_SACD_Mat3_Vec3_Mult(rot_from_axis_angle, vec);
+    transformed_vec1 = SC_SACD_Mat3_Vec3_Mult(rotation_mat, vec);
+
+    CHECK_FLOAT(transformed_vec0.x, transformed_vec1.x);
+    CHECK_FLOAT(transformed_vec0.y, transformed_vec1.y);
+    CHECK_FLOAT(transformed_vec0.z, transformed_vec1.z);
+  }
+
+  // Test rotation matrix to axis-angle.
+  {
+      // X-axis.
+      float angle = std::numbers::pi_v<float> / 2.0F;
+      SC_SACD_Mat3 rot_mat = SC_SACD_Rotation_Mat3_XAxis(angle);
+
+      float derived_angle = SC_SACD_LogMap_Angle(rot_mat);
+      CHECK_FLOAT(derived_angle, angle);
+
+      SC_SACD_Vec3 derived_axis = SC_SACD_LogMap_Axis(rot_mat, angle);
+      CHECK_FLOAT(derived_axis.x, 1.0F);
+      CHECK_FLOAT(derived_axis.y, 0.0F);
+      CHECK_FLOAT(derived_axis.z, 0.0F);
+
+      // Y-axis.
+      rot_mat = SC_SACD_Rotation_Mat3_YAxis(angle);
+
+      derived_angle = SC_SACD_LogMap_Angle(rot_mat);
+      CHECK_FLOAT(derived_angle, angle);
+
+      derived_axis = SC_SACD_LogMap_Axis(rot_mat, angle);
+      CHECK_FLOAT(derived_axis.x, 0.0F);
+      CHECK_FLOAT(derived_axis.y, 1.0F);
+      CHECK_FLOAT(derived_axis.z, 0.0F);
+
+      // Z-axis.
+      rot_mat = SC_SACD_Rotation_Mat3_ZAxis(angle);
+
+      derived_angle = SC_SACD_LogMap_Angle(rot_mat);
+      CHECK_FLOAT(derived_angle, angle);
+
+      derived_axis = SC_SACD_LogMap_Axis(rot_mat, angle);
+      CHECK_FLOAT(derived_axis.x, 0.0F);
+      CHECK_FLOAT(derived_axis.y, 0.0F);
+      CHECK_FLOAT(derived_axis.z, 1.0F);
   }
 
   std::cout << "Checks checked: " << checks_checked << '\n'

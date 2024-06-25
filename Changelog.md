@@ -1,5 +1,18 @@
 # Changelog
 
+## Upcoming Changes
+
+## Version 3.3.0
+
+Refactor some internal operators for Vec3/Mat4 operations (like mult., sum,
+etc.)
+
+Added Mat3 and helper functions related to Mat3.
+
+Implemented conversion from axis/angle to rotation matrix (Mat3).
+
+Implemented conversion from rotation matrix (mat3) to axis/angle.
+
 ## Version 3.2.1
 
 Add workflow to build shared/static libs available
