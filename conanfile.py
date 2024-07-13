@@ -5,7 +5,7 @@ import os
 
 class SC_3D_collision_helpersRecipe(ConanFile):
     name = "3d_collision_helpers"
-    version = "3.22.1"
+    version = "3.3.0"
     package_type = "library"
 
     # Optional metadata
