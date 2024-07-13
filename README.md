@@ -1,5 +1,7 @@
 # 3D Collision Helpers
 
+[C++ conan package](https://git.seodisparate.com/stephenseo/-/packages/conan/3d_collision_helpers/versions)
+
 Things to note:
 
 - `main` is the stable branch. Expect things to not break unless the major
